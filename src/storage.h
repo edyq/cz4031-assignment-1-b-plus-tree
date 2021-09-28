@@ -29,7 +29,7 @@ class Storage {
 
     /**
      * @brief insert a new entry to storage and returns pinter of the inserted
-     * block
+     * block. returns nullptr if no more available blocks
      * \warning assuming one entry cannot be seperated into blocks
      *
      * @param entry
@@ -42,7 +42,8 @@ class Storage {
    private:
     size_t total_size_;
     size_t block_size_;
-    void* arena_;
+    char* arena_;
+    const size_t entry_size_ = 19;
     std::vector<std::shared_ptr<Block>> blocks_;
 };
 
