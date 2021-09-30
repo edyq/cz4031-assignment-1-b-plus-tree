@@ -15,6 +15,7 @@ class Node {
 protected:
     Node *parentPtr;            // Pointer to an array of keys in this node; check float/double
     int numKeys;                // Current number of keys in this node;
+    int maxKeys;
     bool isLeaf;                // Whether this node is a leaf node;
     friend class BPTree;        // BPTree can access Node's private variables;
     vector<uint32_t> keys;
@@ -25,9 +26,9 @@ private:
     vector<Node *> pointers;
 
 public:
-    InternalNode(int maxKeys);  // Constructor
+    InternalNode(int maxNumKeys, Node *pPtr);  // Constructor
 
-    Node *getChildNodes() {
+    vector<Node *>getChildNodes() {
         return pointers;
     }
 };
@@ -38,7 +39,7 @@ private:
     LeafNode *nextNode;             // Pointer to the neighboring leaf node
 
 public:
-    LeafNode(int maxKeys);      // Constructor
+    LeafNode(int maxNumKeys, Node *pPtr);      // Constructor
 
     vector<shared_ptr<Block>> getBlocks() {
         return blocks;

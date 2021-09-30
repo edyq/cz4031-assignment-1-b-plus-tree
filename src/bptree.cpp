@@ -4,17 +4,24 @@
 #include <vector>
 using namespace std;
 
-InternalNode::InternalNode(int maxKeys) {
-    keys = new float[maxKeys];
-    numKeys = 0;
-    isLeaf = false;
-    pointers = new Node[maxKeys + 1];
+InternalNode::InternalNode(int maxNumKeys, Node *pPtr) {
+    Node* parentPtr = pPtr;
+    vector<uint32_t>* keys = new vector<uint32_t>;
+    int numKeys = 0;
+    int maxKeys = maxNumKeys;
+    bool isLeaf = false;
+    vector<Node *>* pointers = new vector<Node *>;
+
 }
 
-LeafNode::LeafNode(int maxKeys) {
-    keys = new float[maxKeys];
-    numKeys = 0;
-    isLeaf = true;
-    vector<Block> blocks;
-    nextNode = nullptr;
+LeafNode::LeafNode(int maxNumKeys, Node *pPtr) {
+    Node* parentPtr = pPtr;
+    vector<uint32_t>* keys = new vector<uint32_t>;
+    int numKeys = 0;
+    int maxKeys = maxNumKeys;
+    bool isLeaf = true;
+    vector<shared_ptr<Block>>* blocks = new vector<shared_ptr<Block>>;
+    Node* nextNode = nullptr;
 }
+
+
