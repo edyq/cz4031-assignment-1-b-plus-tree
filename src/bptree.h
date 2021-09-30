@@ -13,33 +13,35 @@ typedef int KEY_TYPE;
 
 class Node {
 protected:
-    float *keys;                // Pointer to an array of keys in this node;
+    Node *parentPtr;            // Pointer to an array of keys in this node; check float/double
     int numKeys;                // Current number of keys in this node;
+    int maxKeys;
     bool isLeaf;                // Whether this node is a leaf node;
     friend class BPTree;        // BPTree can access Node's private variables;
+    vector<uint32_t> keys;
 };
 
 class InternalNode:Node {
 private:
-    Node *pointers;             // Pointers to an array of Node;
+    vector<Node *> pointers;
 
 public:
-    InternalNode(int maxKeys);  // Constructor
+    InternalNode(int maxNumKeys, Node *pPtr);  // Constructor
 
-    Node *getNodes() {
+    vector<Node *>getChildNodes() {
         return pointers;
     }
 };
 
 class LeafNode:Node {
 private:
-    vector<Block> blocks;       // Pointer to an array of blocks storing the records
-    LeafNode *nextNode;         // Pointer to the neighboring leaf node
+    vector<shared_ptr<Block>> blocks;              // Pointer to an array of blocks storing the records
+    LeafNode *nextNode;             // Pointer to the neighboring leaf node
 
 public:
-    LeafNode(int maxKeys);      // Constructor
+    LeafNode(int maxNumKeys, Node *pPtr);      // Constructor
 
-    vector<Block> getBlocks() {
+    vector<shared_ptr<Block>> getBlocks() {
         return blocks;
     }
 
