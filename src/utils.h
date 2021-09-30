@@ -23,4 +23,25 @@ inline void unsignedNumToChars(char* buf, const T number) {
     }
 }
 
+/**
+ * Convert data to Entry object.
+ * @param ptr pointer to data
+ * @return Entry object
+ */
+inline Entry charsToEntry(char* ptr) {
+	Entry entry{};
+
+	// Get tconst
+	memcpy(entry.tconst, ptr, Entry::tconstSize);
+	ptr += Entry::tconstSize;
+
+	// Get rating
+	entry.rating = charsToUnsignedNum<Entry::ratingType>(ptr);
+	ptr += sizeof entry.rating;
+
+	// Get numVotes
+	entry.numVotes = charsToUnsignedNum<Entry::numVotesType>(ptr);
+	ptr += sizeof entry.numVotes;
+	return entry;
+}
 #endif

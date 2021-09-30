@@ -9,10 +9,16 @@
 #include "block.h"
 
 struct Entry {
+	typedef uint8_t ratingType;
+	typedef uint32_t numVotesType;
+	static constexpr int tconstSize = 9;
+	static constexpr int size = 19;
+
     // tconst	averageRating	numVotes
-    char tconst[9];
-    uint8_t rating;  // with one implied decimal
-    uint32_t numVotes;  // uint16_t may leads to overflow
+    char tconst[tconstSize];
+    ratingType rating;  // with one implied decimal
+    numVotesType numVotes;  // uint16_t may leads to overflow
+
 };
 
 class Storage {
@@ -38,7 +44,7 @@ class Storage {
 
     bool deleteEntry(std::shared_ptr<Block>, const char* tconst);
 
-    // TODO: query
+    std::vector<Entry> query(std::shared_ptr<Block> block, double lowerBound, double upperBound);
 
    private:
     size_t total_size_;
