@@ -56,7 +56,7 @@ private:
     int levels;                 // Height of the BP tree
     int numNodes;               // Total number of nodes in the BP tree
 
-    void insertInternal(uint32_t key, shared_ptr<Block> blockAddress);
+    void updateInternalParent(uint32_t key, Node *parentNode, Node *newLeafNode);
 
     void removeInternal(uint32_t key);
 
