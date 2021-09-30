@@ -33,8 +33,8 @@ public:
 
 class LeafNode:Node {
 private:
-    vector<Block> blocks;              // Pointer to an array of blocks storing the records
-    LeafNode *nextNode;             // Pointer to the neighboring leaf node
+    vector<Block> blocks;       // Pointer to an array of blocks storing the records
+    LeafNode *nextNode;         // Pointer to the neighboring leaf node
 
 public:
     LeafNode(int maxKeys);      // Constructor
