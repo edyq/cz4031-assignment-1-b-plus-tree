@@ -17,11 +17,13 @@ private:
     vector<uint32_t> keys;
     int numKeys;                // Current number of keys in this node;
     int maxKeys;
+
     bool isLeaf;                // Whether this node is a leaf node;
     friend class BPTree;        // BPTree can access Node's private variables;
     vector<Node *> pointers;      // attr for non-leaf node
     vector<vector<shared_ptr<Block>>> blocks;              // attr for leaf node
     Node *nextNode;         // attr for leaf node
+    Node *preNode;         // attr for leaf node
 
 public:
     Node(int maxNumKeys, Node *parentPtr, bool isLeaf);

@@ -13,6 +13,7 @@ Node::Node(int maxNumKeys, Node *parentPtr, bool isLeaf) {
     pointers = * new vector<Node *>;
     blocks = * new vector<vector<shared_ptr<Block>>>;
     nextNode = nullptr;
+    preNode = nullptr;
 }
 
 BPTree::BPTree(int maxNumKeys) {
