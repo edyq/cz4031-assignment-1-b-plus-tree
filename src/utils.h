@@ -11,6 +11,8 @@
 
 inline size_t mbToBytes(size_t size_in_mb) { return size_in_mb * 1048576; }
 
+inline double bytesToMb(size_t size_in_bytes) { return (double)size_in_bytes / 1048576; }
+
 template <typename T>
 inline T charsToUnsignedNum(const char* buf) {
     T ret = 0;
