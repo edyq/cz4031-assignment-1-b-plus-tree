@@ -7,7 +7,8 @@
 #define MAXNUM_DATA (ORDER_V * 2)
 
 #include "block.h"
-
+#include <vector>
+using namespace std;
 typedef int KEY_TYPE;
 
 class Node {
@@ -32,17 +33,17 @@ public:
 
 class LeafNode:Node {
 private:
-    Block *blocks;              // Pointer to an array of blocks storing the records
+    vector<Block> blocks;              // Pointer to an array of blocks storing the records
     LeafNode *nextNode;             // Pointer to the neighboring leaf node
 
 public:
     LeafNode(int maxKeys);      // Constructor
 
-    Block *getBlocks() {
+    vector<Block> getBlocks() {
         return blocks;
     }
 
-    Node *getNextNode() {
+    LeafNode *getNextNode() {
         return nextNode;
     }
 };
