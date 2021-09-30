@@ -20,7 +20,7 @@ private:
     bool isLeaf;                // Whether this node is a leaf node;
     friend class BPTree;        // BPTree can access Node's private variables;
     vector<Node *> pointers;      // attr for non-leaf node
-    vector<shared_ptr<Block>> blocks;              // attr for leaf node
+    vector<vector<shared_ptr<Block>>> blocks;              // attr for leaf node
     Node *nextNode;         // attr for leaf node
 
 public:
@@ -32,7 +32,7 @@ public:
     vector<Node *>getChildNodes() {
         return pointers;
     }
-    vector<shared_ptr<Block>> getBlocks() {
+    vector<vector<shared_ptr<Block>>> getBlocks() {
         return blocks;
     }
 
