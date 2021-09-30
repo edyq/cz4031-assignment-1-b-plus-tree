@@ -6,36 +6,84 @@
 #define MAXNUM_POINTER (MAXNUM_KEY + 1)
 #define MAXNUM_DATA (ORDER_V * 2)
 
+#include "block.h"
+
 typedef int KEY_TYPE;
 
-class BPNode{
-private:
-    Address *pointers;
-    float *keys;
-    int num_keys;
-    int max_keys;
-    bool isLeaf;
-    friend class BPTree;
-public:
-    BPNode(int maxKeys);
+class Node {
+protected:
+    float *keys;                // Pointer to an array of keys in this node;
+    int numKeys;                // Current number of keys in this node;
+    bool isLeaf;                // Whether this node is a leaf node;
+    friend class BPTree;        // BPTree can access Node's private variables;
 };
 
-class BPTree{
+class InternalNode:Node {
 private:
-    BPNode *root;
-    int maxKeys;
-    int levels;
-    int numNodes;
-    void insInternal(float key);
-    void rmInternal(float key);
+    Node *pointers;             // Pointers to an array of Node;
 
 public:
-    BPlusTree(int maxKeys);
+    InternalNode(int maxKeys);  // Constructor
+
+    Node *getNodes() {
+        return pointers;
+    }
+};
+
+class LeafNode:Node {
+private:
+    Block *blocks;              // Pointer to an array of blocks storing the records
+    LeafNode *nextNode;             // Pointer to the neighboring leaf node
+
+public:
+    LeafNode(int maxKeys);      // Constructor
+
+    Block *getBlocks() {
+        return blocks;
+    }
+
+    Node *getNextNode() {
+        return nextNode;
+    }
+};
+
+class BPTree {
+private:
+    Node *root;                 // Pointer to the root node of the tree
+    int maxKeys;                // Max number of keys in a node in the BP tree
+    int levels;                 // Height of the BP tree
+    int numNodes;               // Total number of nodes in the BP tree
+
+    void insertInternal(float key);
+
+    void removeInternal(float key);
+
+public:
+    BPTree(int maxKeys);        // Constructor
+
     void search(float lbKey, float ubKey);
+
     void insert(float key);
+
     int remove(float key);
 
+    Node *getFirstChildNode() const;
 
+    [[nodiscard]] int getLevels() const {
+        return levels;
+    }
+
+    [[nodiscard]] int getNumNodes() const {
+        return numNodes;
+    }
+
+    [[nodiscard]] int getMaxKeys() const {
+        return maxKeys;
+    }
+
+    [[nodiscard]] Node *getRoot() const {
+        return root;
+    }
 };
 
 

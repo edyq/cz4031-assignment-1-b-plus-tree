@@ -4,6 +4,7 @@
 
 #include "storage.h"
 #include "utils.h"
+#include "bptree.h"
 
 int main(int argc, char* argv[]) {
     assert(argc == 3 &&
