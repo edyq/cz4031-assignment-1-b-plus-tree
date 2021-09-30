@@ -1,7 +1,13 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <cassert>
 #include <stdlib.h>
+#include <vector>
+#include <fstream>
+
+#include "storage.h"
+
 
 inline size_t mbToBytes(size_t size_in_mb) { return size_in_mb * 1048576; }
 

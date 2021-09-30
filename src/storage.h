@@ -19,6 +19,13 @@ struct Entry {
     ratingType rating;  // with one implied decimal
     numVotesType numVotes;  // uint16_t may leads to overflow
 
+    float getRating() {
+        float res = 0.;
+        int num_rat = rating;
+        res += num_rat / 10;
+        res += num_rat % 10 * 0.1;
+        return res;
+    }
 };
 
 class Storage {
