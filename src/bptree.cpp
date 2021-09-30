@@ -5,12 +5,12 @@
 #include <algorithm>
 using namespace std;
 
-Node::Node(int maxNumKeys, Node *parentPtr, bool isLeaf) {
+Node::Node(int maxNumKeys, Node *parentPtr, bool isleaf) {
     parentPtr = parentPtr;
     keys = * new vector<uint32_t>;
     numKeys = 0;
     maxKeys = maxNumKeys;
-    isLeaf = isLeaf;
+    isLeaf = isleaf;
     pointers = * new vector<Node *>;
     blocks = * new vector<vector<shared_ptr<Block>>>;
     nextNode = nullptr;
@@ -23,9 +23,14 @@ BPTree::BPTree(int maxNumKeys) {
     levels = 0;
     numNodes = 0;
 }
+
+void BPTree::remove(uint32_t key) {
+    removeInternal(key);
+}
+
 void BPTree::removeInternal(uint32_t key) {
     Node *cur_node = root;
-    vector<uint32_t> keys = cur_node->keys;
+    vector<uint32_t> keys = cur_node->getKeys();
     while(!cur_node->isLeafNode()){
         for (int i=0; i<keys.size(); i++){
             if (key < keys[i]){
@@ -43,6 +48,7 @@ void BPTree::removeInternal(uint32_t key) {
             break;
         }
     }
+
     if (!found){
         return;
     }else {
@@ -51,14 +57,13 @@ void BPTree::removeInternal(uint32_t key) {
         cur_node->blocks.erase(cur_node->blocks.begin() + index);
         cur_node->numKeys--;
 
-        while ((!cur_node->preNode && cur_node->numKeys + cur_node->preNode->numKeys <= cur_node->maxKeys) ||
-               (!cur_node->nextNode && cur_node->numKeys + cur_node->nextNode->numKeys <= cur_node->maxKeys)) {
-            if (cur_node->numKeys + cur_node->preNode->numKeys <= cur_node->maxKeys) {
+        while ((cur_node->preNode && cur_node->numKeys + cur_node->preNode->numKeys <= cur_node->maxKeys) ||
+               (cur_node->nextNode && cur_node->numKeys + cur_node->nextNode->numKeys <= cur_node->maxKeys)) {
+            if (cur_node->preNode && cur_node->numKeys + cur_node->preNode->numKeys <= cur_node->maxKeys) {
                 cur_node = cur_node->preNode;
             }
-//            vector < Node * > nodeList = cur_node->getParentPtr()->getChildNodes();
-//            vector < Node * >::iterator it = std::find(nodeList.begin(), nodeList.end(), cur_node);
-//            int index = distance(nodeList.begin(), it);
+
+
             cur_node->numKeys += cur_node->nextNode->numKeys;
             move(cur_node->nextNode->keys.begin(), cur_node->nextNode->keys.end(), std::back_inserter(cur_node->keys));
 
