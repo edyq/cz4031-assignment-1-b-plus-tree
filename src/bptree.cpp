@@ -4,36 +4,20 @@
 #include <vector>
 using namespace std;
 
-InternalNode::InternalNode(int maxNumKeys, Node *parentPtr) {
-    Node* parentPtr = parentPtr;
-    vector<uint32_t>* keys = new vector<uint32_t>;
-    int numKeys = 0;
-    int maxKeys = maxNumKeys;
-    bool isLeaf = false;
-    vector<Node *>* pointers = new vector<Node *>;
-
+Node::Node(int maxNumKeys, Node *parentPtr, bool isLeaf) {
+    parentPtr = parentPtr;
+    keys = * new vector<uint32_t>;
+    numKeys = 0;
+    maxKeys = maxNumKeys;
+    isLeaf = isLeaf;
+    pointers = * new vector<Node *>;
+    blocks = * new vector<shared_ptr<Block>>;
+    nextNode = nullptr;
 }
 
-LeafNode::LeafNode(int maxNumKeys, Node *parentPtr) {
-    Node* parentPtr = parentPtr;
-    vector<uint32_t>* keys = new vector<uint32_t>;
-    int numKeys = 0;
-    int maxKeys = maxNumKeys;
-    bool isLeaf = true;
-    vector<shared_ptr<Block>>* blocks = new vector<shared_ptr<Block>>;
-    Node* nextNode = nullptr;
-}
-
-BPTree::BPTree(int maxKeys) {
+BPTree::BPTree(int maxNumKeys) {
     root = nullptr;
-    int maxKeys = maxKeys;
+    maxKeys = maxNumKeys;
     levels = 0;
     numNodes = 0;
-}
-
-// insert a record into the bptree
-void BPTree::insertInternal(uint32_t key, shared_ptr<Block> blockAddress) {
-    if (root == nullptr) {
-
-    }
 }

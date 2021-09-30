@@ -12,7 +12,7 @@ using namespace std;
 typedef int KEY_TYPE;
 
 class Node {
-protected:
+private:
     Node *parentPtr;            // Pointer to an array of keys in this node; check float/double
     vector<uint32_t> keys;
     int numKeys;                // Current number of keys in this node;
@@ -21,9 +21,11 @@ protected:
     friend class BPTree;        // BPTree can access Node's private variables;
     vector<Node *> pointers;      // attr for non-leaf node
     vector<shared_ptr<Block>> blocks;              // attr for leaf node
-    LeafNode *nextNode;         // attr for leaf node
+    Node *nextNode;         // attr for leaf node
 
 public:
+    Node(int maxNumKeys, Node *parentPtr, bool isLeaf);
+
     bool isLeafNode(){
         return isLeaf;
     }
@@ -57,7 +59,7 @@ private:
     void removeInternal(uint32_t key);
 
 public:
-    BPTree(int maxKeys);        // Constructor
+    BPTree(int maxNumKeys);        // Constructor
 
     ~BPTree(){};
 
