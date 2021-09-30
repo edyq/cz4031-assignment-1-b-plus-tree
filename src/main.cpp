@@ -5,6 +5,7 @@
 
 #include "storage.h"
 #include "utils.h"
+#include "bptree.h"
 
 std::vector<Entry> LoadEntryFromFileOrDie(
     const std::string filename = "../data/data.tsv") {
