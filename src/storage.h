@@ -11,8 +11,7 @@
 struct Entry {
     // tconst	averageRating	numVotes
     char tconst[9];
-    uint8_t averageRatingInteger;
-    uint8_t averageRatingDecimal;
+    uint8_t rating;  // with one implied decimal
     uint32_t numVotes;  // uint16_t may leads to overflow
 };
 
@@ -38,6 +37,8 @@ class Storage {
     std::shared_ptr<Block> insertEntry(Entry entry);
 
     bool deleteEntry(std::shared_ptr<Block>, const char* tconst);
+
+    // TODO: query
 
    private:
     size_t total_size_;

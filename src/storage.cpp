@@ -27,8 +27,7 @@ std::shared_ptr<Block> Storage::insertEntry(Entry entry) {
     auto ptr = serlized_entry;
     std::memcpy(ptr, entry.tconst, 9);
     ptr += 9;
-    unsignedNumToChars<uint8_t>(ptr, entry.averageRatingInteger);
-    unsignedNumToChars<uint8_t>(ptr++, entry.averageRatingInteger);
+    unsignedNumToChars<uint8_t>(ptr, entry.rating);
     unsignedNumToChars<uint32_t>(ptr++, entry.numVotes);
 
     // step 2: find a proper block
