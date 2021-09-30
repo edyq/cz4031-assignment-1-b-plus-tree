@@ -51,10 +51,22 @@ void advanceToNextEntry(char*& ptr) {
 	ptr += Entry::size;
 }
 
+bool Storage::deleteEntry(std::shared_ptr<Block> block, const char *tconst) {
+	auto start = block->getPtr();
+	for (auto ptr = start; ptr < block->getWritePtr(); advanceToNextEntry(ptr)) {
+		Entry entry = charsToEntry(ptr);
+		if (!memcmp(entry.tconst, tconst, Entry::tconstSize)) {
+			block->deleteData(ptr, Entry::size);
+			return true;
+		}
+	}
+	return false;
+}
+
 std::vector<Entry> Storage::query(std::shared_ptr<Block> block, double lowerBound, double upperBound) {
 	std::vector<Entry> result;
 	auto start = block->getPtr(), end = block->getWritePtr();
-	for (auto ptr = start; ptr != end; advanceToNextEntry(ptr)) {
+	for (auto ptr = start; ptr < end; advanceToNextEntry(ptr)) {
 		Entry entry = charsToEntry(ptr);
 
 		// check if entry numVotes is within [lowerBound, upperBound]
@@ -64,5 +76,3 @@ std::vector<Entry> Storage::query(std::shared_ptr<Block> block, double lowerBoun
 	}
 	return result;
 }
-
-

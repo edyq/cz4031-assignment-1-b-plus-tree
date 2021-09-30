@@ -13,7 +13,7 @@ struct Entry {
 	typedef uint8_t ratingType;
 	typedef uint32_t numVotesType;
 	static constexpr int tconstSize = 9;
-	static constexpr int size = 19;
+	static constexpr int size = 18;
 
     // tconst	averageRating	numVotes
     char tconst[tconstSize];
@@ -73,7 +73,7 @@ class Storage {
     size_t total_size_;
     size_t block_size_;
     char* arena_;
-    const size_t entry_size_ = 19;
+    const size_t entry_size_ = Entry::size;
     std::vector<std::shared_ptr<Block>> blocks_;
 };
 
