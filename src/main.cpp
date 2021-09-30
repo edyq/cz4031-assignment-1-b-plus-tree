@@ -10,14 +10,12 @@
 
 std::vector<Entry> LoadEntryFromFileOrDie(
     const std::string filename = "../data/data.tsv") {
-    std::cout << "hey";
     std::ifstream fin(filename);
     assert(fin.good() && "failed to open file for data ");
     std::string infile;
     std::vector<Entry> contents;
     size_t counter = 0;
     Entry current_entry;
-    std::cout << "about to start";
     while (fin >> infile) {
         if (++counter <= 3) continue;  // header, not needed
         switch (counter % 3) {
@@ -36,16 +34,26 @@ std::vector<Entry> LoadEntryFromFileOrDie(
     return contents;
 }
 
-void run_experiment_1_insert_data(Storage& storage, std::vector<Entry>& entries, BPTree& indexTree) {
-    std::cout << "inserting entries..." << std::endl;
+void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& indexTree) {
     std::set<std::shared_ptr<Block>> used_blocks;
     for (auto& entry: entries) {
         auto block_ptr = storage.insertEntry(entry);
         indexTree.insert(entry.numVotes, block_ptr);
         used_blocks.insert(block_ptr);
     }
-    std::cout << "total number of block used: " << used_blocks.size();
-    std::cout << "size of database: " << bytesToMb(entries.size() * Entry::size);
+    std::cout << "=========================" << std::endl;
+    std::cout << " Experiment 1:" << std::endl;
+    std::cout << "the number of blocks: " << used_blocks.size();
+    std::cout << "the size of database (in terms of MB)" << bytesToMb(entries.size() * Entry::size);
+
+    std::cout << "=========================" << std::endl;
+    std::cout << " Experiment 2:" << std::endl;
+    std::cout << "parameter n of the B+ tree" << indexTree.getMaxKeys();
+    std::cout << "the number of nodes of the B+ tree" << indexTree.getNumNodes();
+    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree" << indexTree.getLevels();
+    auto rootNode = indexTree.getRoot();
+    std::cout << "the content of the root node: ";
+    printVector<uint32_t>(rootNode->getKeys());
 }
 
 int main(int argc, char* argv[]) {
@@ -65,10 +73,7 @@ int main(int argc, char* argv[]) {
 
     // run experiments
     // TODO: this section was not tested as bp hasn't been finished yet
-    std::cout << "====================" << std::endl;
-    std::cout << "running experment 1" << std::endl;
-    run_experiment_1_insert_data(storage, entries, bpIndexTree);
-    std::cout << "====================" << std::endl;
+    run_experiments(storage, entries, bpIndexTree);
 
     return 0;
 }

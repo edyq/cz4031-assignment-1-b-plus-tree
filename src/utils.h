@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <stdlib.h>
+#include <string>
 #include <vector>
 #include <fstream>
 
@@ -12,6 +13,17 @@
 inline size_t mbToBytes(size_t size_in_mb) { return size_in_mb * 1048576; }
 
 inline double bytesToMb(size_t size_in_bytes) { return (double)size_in_bytes / 1048576; }
+
+template <typename T>
+inline void printVector(std::vector<T> nums, std::string delimiter = " | ") {
+	if (nums.size() == 0) return;
+	const auto termination_idx =  nums.size() - 1;
+	for (size_t idx = 0; idx < termination_idx; idx++) {
+		std::cout << std::to_string(nums.at(idx)) << delimiter;
+	}
+	std::cout << std::to_string(nums.at(termination_idx)) << std::endl;
+}
+
 
 template <typename T>
 inline T charsToUnsignedNum(const char* buf) {
