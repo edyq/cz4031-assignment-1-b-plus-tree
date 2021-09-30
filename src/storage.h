@@ -44,6 +44,13 @@ class Storage {
 
     bool deleteEntry(std::shared_ptr<Block>, const char* tconst);
 
+    /**
+     * Get entries whose numVotes is within [lowerBound, upperBound].
+     * @param block pointer to the block to search
+     * @param lowerBound lower bound of numVotes
+     * @param upperBound upper bound of numVotes
+     * @return a vector of Entry objects
+     */
     std::vector<Entry> query(std::shared_ptr<Block> block, double lowerBound, double upperBound);
 
    private:
