@@ -19,47 +19,31 @@ protected:
     int maxKeys;
     bool isLeaf;                // Whether this node is a leaf node;
     friend class BPTree;        // BPTree can access Node's private variables;
+    vector<Node *> pointers;      // attr for non-leaf node
+    vector<shared_ptr<Block>> blocks;              // attr for leaf node
+    LeafNode *nextNode;         // attr for leaf node
 
 public:
-    ~Node(){};
-};
-
-class InternalNode:Node {
-private:
-    vector<Node *> pointers;
-
-public:
-    InternalNode(int maxNumKeys, Node *parentPtr);  // Constructor
-
+    bool isLeafNode(){
+        return isLeaf;
+    }
     vector<Node *>getChildNodes() {
         return pointers;
     }
-
-    ~InternalNode(){};
-
-    Node *getParentPtr() {
-        return parentPtr;
-    }
-};
-
-class LeafNode:Node {
-private:
-    vector<shared_ptr<Block>> blocks;              // Pointer to an array of blocks storing the records
-    LeafNode *nextNode;             // Pointer to the neighboring leaf node
-
-public:
-    LeafNode(int maxNumKeys, Node *parentPtr);      // Constructor
-
-    ~LeafNode(){};
-
     vector<shared_ptr<Block>> getBlocks() {
         return blocks;
     }
 
-    LeafNode *getNextNode() {
+    Node *getNextNode() {
         return nextNode;
     }
+    Node *getParentPtr() {
+        return parentPtr;
+    }
+
+    ~Node(){};
 };
+
 
 class BPTree {
 private:
