@@ -29,7 +29,7 @@ void BPTree::insertInternal(uint32_t key, shared_ptr<Block> blockAddress) {
         root = new Node(maxKeys, nullptr, true);
         root->keys.push_back(key);
         root->numKeys += 1;
-        root->blocks.push_back(blockAddress);
+        root->blocks[0].push_back(blockAddress);
         levels = 1;
     } else {
         // else the tree exists, traverse the tree to find the proper place to insert the key
@@ -52,19 +52,40 @@ void BPTree::insertInternal(uint32_t key, shared_ptr<Block> blockAddress) {
                 }
             }
         }
+        // TODO: we should check whether the new key is contained in the key list;
 
-        // at leaf node; insert key here
-        if (cursor->numKeys < maxKeys) {
-            int i = 0;
-            while (i < cursor->numKeys) {
-                if (key < cursor->keys[i]) break;
-                i++;
+        int keyIndex = find(cursor->keys.begin(), cursor->keys.end(), key) - cursor->keys.end();
+        if (keyIndex < cursor->keys.size()) {
+            // no new key needs to be inserted
+            cursor->blocks[keyIndex].push_back(blockAddress);
+        } else {
+            // new key has to be inserted;
+            if (cursor->numKeys < maxKeys) {
+                // there is place for a new key in the current node
+                int i = 0;
+                while (i < cursor->numKeys and key > cursor->keys[i]) i++;
+
+                cursor->keys.insert(cursor->keys.begin() + i, key);
+                cursor->numKeys += 1;
+                vector<shared_ptr<Block>> newVector = {blockAddress};
+                cursor->blocks.insert(cursor->keys.begin() + i, newVector);
+            } else {
+                // current node is full, split the node, update the parent, recursively T.T
+                Node *parentNode = cursor->parentPtr;
+                Node *newLeafNode = Node(maxKeys, nullptr, true);
+
+                vector<uint32_t> tempKeyList = cursor->keys;
+                vector<vector<shared_ptr<Block>>> tempBlockVector = cursor->blocks;
+                Node *nextNode = cursor->pointers[-1];      // leaf nodes have only one pointer to other nodes
+
+                int i = 0;
+                while (i < maxKeys and key > tempKeyList[i]) i++;
+                tempKeyList.insert(tempKeyList.begin() + i, key);
+                vector<shared_ptr<Block>> newVector = {blockAddress};
+                tempBlockVector.insert(tempBlockVector.begin() + i, newVector);
+
+
             }
-            cursor->keys.insert(cursor->keys.begin() + i, key);
-
-            cursor->keys.push_back(key);
-            cursor->numKeys += 1;
-            cursor->blocks.push_back(blockAddress);
         }
     }
 }
