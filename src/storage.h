@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 
+#include <string>
 #include <memory>
 #include <vector>
 
@@ -18,6 +19,14 @@ struct Entry {
     char tconst[tconstSize];
     ratingType rating;  // with one implied decimal
     numVotesType numVotes;  // uint16_t may leads to overflow
+
+    std::string toString() {
+    	std::string s;
+    	s += tconst;
+    	s += " " + std::to_string(rating);
+    	s += " " + std::to_string(numVotes);
+    	return s;
+    }
 
 };
 
