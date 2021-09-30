@@ -4,8 +4,8 @@
 #include <vector>
 using namespace std;
 
-InternalNode::InternalNode(int maxNumKeys, Node *pPtr) {
-    Node* parentPtr = pPtr;
+InternalNode::InternalNode(int maxNumKeys, Node *parentPtr) {
+    Node* parentPtr = parentPtr;
     vector<uint32_t>* keys = new vector<uint32_t>;
     int numKeys = 0;
     int maxKeys = maxNumKeys;
@@ -14,8 +14,8 @@ InternalNode::InternalNode(int maxNumKeys, Node *pPtr) {
 
 }
 
-LeafNode::LeafNode(int maxNumKeys, Node *pPtr) {
-    Node* parentPtr = pPtr;
+LeafNode::LeafNode(int maxNumKeys, Node *parentPtr) {
+    Node* parentPtr = parentPtr;
     vector<uint32_t>* keys = new vector<uint32_t>;
     int numKeys = 0;
     int maxKeys = maxNumKeys;
@@ -23,5 +23,3 @@ LeafNode::LeafNode(int maxNumKeys, Node *pPtr) {
     vector<shared_ptr<Block>>* blocks = new vector<shared_ptr<Block>>;
     Node* nextNode = nullptr;
 }
-
-

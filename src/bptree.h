@@ -14,11 +14,14 @@ typedef int KEY_TYPE;
 class Node {
 protected:
     Node *parentPtr;            // Pointer to an array of keys in this node; check float/double
+    vector<uint32_t> keys;
     int numKeys;                // Current number of keys in this node;
     int maxKeys;
     bool isLeaf;                // Whether this node is a leaf node;
     friend class BPTree;        // BPTree can access Node's private variables;
-    vector<uint32_t> keys;
+
+public:
+    ~Node(){};
 };
 
 class InternalNode:Node {
@@ -26,10 +29,16 @@ private:
     vector<Node *> pointers;
 
 public:
-    InternalNode(int maxNumKeys, Node *pPtr);  // Constructor
+    InternalNode(int maxNumKeys, Node *parentPtr);  // Constructor
 
     vector<Node *>getChildNodes() {
         return pointers;
+    }
+
+    ~InternalNode(){};
+
+    Node *getParentPtr() {
+        return parentPtr;
     }
 };
 
@@ -39,7 +48,9 @@ private:
     LeafNode *nextNode;             // Pointer to the neighboring leaf node
 
 public:
-    LeafNode(int maxNumKeys, Node *pPtr);      // Constructor
+    LeafNode(int maxNumKeys, Node *parentPtr);      // Constructor
+
+    ~LeafNode(){};
 
     vector<shared_ptr<Block>> getBlocks() {
         return blocks;
@@ -57,18 +68,20 @@ private:
     int levels;                 // Height of the BP tree
     int numNodes;               // Total number of nodes in the BP tree
 
-    void insertInternal(float key);
+    void insertInternal(uint32_t key);
 
-    void removeInternal(float key);
+    void removeInternal(uint32_t key);
 
 public:
     BPTree(int maxKeys);        // Constructor
 
-    void search(float lbKey, float ubKey);
+    ~BPTree(){};
 
-    void insert(float key);
+    void search(uint32_t lbKey, uint32_t ubKey);
 
-    int remove(float key);
+    void insert(uint32_t key);
+
+    int remove(uint32_t key);
 
     Node *getFirstChildNode() const;
 
