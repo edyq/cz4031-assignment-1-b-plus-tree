@@ -23,6 +23,7 @@ class Block {
      * @return char*
      */
     char* getPtr() { return ptr_; }
+    char* getWritePtr() { return write_ptr_; }
 
     size_t getSize() { return size_; }
 

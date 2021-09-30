@@ -27,9 +27,8 @@ std::shared_ptr<Block> Storage::insertEntry(Entry entry) {
     auto ptr = serlized_entry;
     std::memcpy(ptr, entry.tconst, 9);
     ptr += 9;
-    unsignedNumToChars<uint8_t>(ptr, entry.averageRatingInteger);
-    unsignedNumToChars<uint8_t>(ptr++, entry.averageRatingInteger);
-    unsignedNumToChars<uint32_t>(ptr++, entry.numVotes);
+    unsignedNumToChars<uint8_t>(ptr, entry.rating);
+    unsignedNumToChars<uint32_t>(++ptr, entry.numVotes);
 
     // step 2: find a proper block
     auto target_block = std::find_if(
@@ -47,3 +46,23 @@ std::shared_ptr<Block> Storage::insertEntry(Entry entry) {
 
     return *target_block;
 }
+
+void advanceToNextEntry(char*& ptr) {
+	ptr += Entry::size;
+}
+
+std::vector<Entry> Storage::query(std::shared_ptr<Block> block, double lowerBound, double upperBound) {
+	std::vector<Entry> result;
+	auto start = block->getPtr(), end = block->getWritePtr();
+	for (auto ptr = start; ptr != end; advanceToNextEntry(ptr)) {
+		Entry entry = charsToEntry(ptr);
+
+		// check if entry numVotes is within [lowerBound, upperBound]
+		if (entry.numVotes >= lowerBound && entry.numVotes <= upperBound) {
+			result.push_back(entry);
+		}
+	}
+	return result;
+}
+
+

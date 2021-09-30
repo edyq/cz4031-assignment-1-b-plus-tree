@@ -2,6 +2,7 @@
 #include "block.h"
 #include "iostream"
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 Node::Node(int maxNumKeys, Node *parentPtr, bool isLeaf) {
@@ -13,6 +14,7 @@ Node::Node(int maxNumKeys, Node *parentPtr, bool isLeaf) {
     pointers = * new vector<Node *>;
     blocks = * new vector<vector<shared_ptr<Block>>>;
     nextNode = nullptr;
+    preNode = nullptr;
 }
 
 BPTree::BPTree(int maxNumKeys) {
@@ -68,11 +70,11 @@ void BPTree::insertInternal(uint32_t key, shared_ptr<Block> blockAddress) {
                 cursor->keys.insert(cursor->keys.begin() + i, key);
                 cursor->numKeys += 1;
                 vector<shared_ptr<Block>> newVector = {blockAddress};
-                cursor->blocks.insert(cursor->keys.begin() + i, newVector);
+                cursor->blocks.insert(cursor->blocks.begin() + i, newVector);
             } else {
                 // current node is full, split the node, update the parent, recursively T.T
                 Node *parentNode = cursor->parentPtr;
-                Node *newLeafNode = Node(maxKeys, nullptr, true);
+                Node *newLeafNode = new Node(maxKeys, nullptr, true);
 
                 vector<uint32_t> tempKeyList = cursor->keys;
                 vector<vector<shared_ptr<Block>>> tempBlockVector = cursor->blocks;
@@ -85,7 +87,9 @@ void BPTree::insertInternal(uint32_t key, shared_ptr<Block> blockAddress) {
                 tempBlockVector.insert(tempBlockVector.begin() + i, newVector);
 
 
+
             }
         }
     }
 }
+
