@@ -1,8 +1,10 @@
 #include "bptree.h"
 #include "block.h"
+#include "cassert"
 #include "iostream"
 #include <vector>
 #include <memory>
+#include <math.h>
 #include <algorithm>
 
 #include <math.h>
@@ -370,16 +372,41 @@ void BPTree::updateInternalParent(uint32_t key, Node *cursor, Node *newLeafNode)
         while (key > cursor->keys[i] && i < cursor->numKeys) i++;
 
         tempKeyVector.insert(tempKeyVector.begin() + i, key);
-        tempPtrVector.insert(tempPtrVector.begin() + i, newLeafNode);
+        tempPtrVector.insert(tempPtrVector.begin() + i + 1, newLeafNode);
 
-        cursor->numKeys = (maxKeys + 1) / 2;
-        newInternalNode->numKeys = maxKeys - (maxKeys + 1) / 2;
+        auto leftNumOfPtrs = std::ceil((float)maxKeys / 2 ) + 1;
 
-        cursor->keys = vector<uint32_t>(tempKeyVector.begin(), tempKeyVector.begin() + cursor->numKeys);
-        newInternalNode->keys = vector<uint32_t>(tempKeyVector.begin() + cursor->numKeys, tempKeyVector.end());
+        auto leftPtrs = vector<Node *>(tempPtrVector.begin(), tempPtrVector.begin() + leftNumOfPtrs);
+        assert(leftPtrs.size() > 0);
+        auto rightPtrs = vector<Node *>(tempPtrVector.begin() + leftNumOfPtrs, tempPtrVector.end());
+        assert(rightPtrs.size() > 0);
 
-        cursor->pointers = vector<Node *>(tempPtrVector.begin(), tempPtrVector.begin() + cursor->numKeys);
-        newInternalNode->pointers = vector<Node *>(tempPtrVector.begin() + cursor->numKeys, tempPtrVector.end());
+        vector<uint32_t> leftKeys;
+        auto travel = leftPtrs[0];
+        for (size_t j = 0; j < leftPtrs.size() - 1; j++) {
+            while (!travel->isLeaf) {
+                travel = travel->pointers[0];
+            }
+            leftKeys.emplace_back(travel->getKeys()[0]);
+        }
+
+        vector<uint32_t> rightKeys;
+        travel = rightPtrs[0];
+        for (size_t j = 0; j < rightPtrs.size() - 1; j++) {
+            while (!travel->isLeaf) {
+                travel = travel->pointers[0];
+            }
+            rightKeys.emplace_back(travel->getKeys()[0]);
+        }
+
+        cursor->numKeys = std::ceil((float) maxKeys / 2);
+        newInternalNode->numKeys = std::floor((float) maxKeys / 2);
+        
+        cursor->keys = leftKeys;
+        newInternalNode->keys = rightKeys;
+
+        cursor->pointers = vector<Node *>(tempPtrVector.begin(), tempPtrVector.begin() + cursor->numKeys + 1);
+        newInternalNode->pointers = vector<Node *>(tempPtrVector.begin() + cursor->numKeys + 1, tempPtrVector.end());
 
         newInternalNode->parentPtr = cursor->parentPtr;
 
