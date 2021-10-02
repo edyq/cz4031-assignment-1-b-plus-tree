@@ -34,7 +34,7 @@ BPTree::BPTree(int maxNumKeys) {
     levels = 0;
     numNodes = 0;
 //    below is a mock BPTree
-//    numNodes = 7;
+//    numNodes = 8;
 //    levels = 2;
 //    root = new Node(5, nullptr, false);
 //    root->keys.push_back(6);
@@ -45,6 +45,7 @@ BPTree::BPTree(int maxNumKeys) {
 //    n1->keys.push_back(1);
 //    n1->keys.push_back(2);
 //    n1->keys.push_back(3);
+//    n1->numKeys = 3;
 //    vector<shared_ptr<Block>> *b1 = new vector<shared_ptr<Block>>;
 //    n1->blocks.push_back(*b1);
 //    n1->blocks.push_back(*b1);
@@ -53,6 +54,9 @@ BPTree::BPTree(int maxNumKeys) {
 //    n2->keys.push_back(6);
 //    n2->keys.push_back(7);
 //    n2->keys.push_back(8);
+//    n2->keys.push_back(9);
+//    n2->numKeys = 4;
+//    n2->blocks.push_back(*b1);
 //    n2->blocks.push_back(*b1);
 //    n2->blocks.push_back(*b1);
 //    n2->blocks.push_back(*b1);

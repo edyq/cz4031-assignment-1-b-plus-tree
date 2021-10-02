@@ -183,9 +183,8 @@ int main(int argc, char* argv[]) {
               << std::endl;
     std::cout << "the first entry has numVotes: " << entries[0].numVotes
               << std::endl;
-//
-//
-//    below the test of BPTree
+
+
 //    BPTree t = BPTree(5);
 //
 //    vector<uint32_t> keys = t.getRoot()->getKeys();
@@ -203,8 +202,21 @@ int main(int argc, char* argv[]) {
 //    cout << endl;
 //
 //    t.remove(1);
-//
-//
+//    keys = t.getRoot()->getKeys();
+//    for (int i=0; i<keys.size(); i++){
+//        cout << keys[i] << " ";
+//    }
+//    cout << endl;
+//    nodes = t.getRoot()->getChildNodes();
+//    for(int i=0; i< nodes.size(); i++){
+//        keys = nodes[i]->getKeys();
+//        for (int i=0; i<keys.size(); i++){
+//            cout << keys[i] << " ";
+//        }
+//        cout << endl;
+//    }
+//    t.remove(2);
+//    t.remove(6);
 //    keys = t.getRoot()->getKeys();
 //    for (int i=0; i<keys.size(); i++){
 //        cout << keys[i] << " ";
