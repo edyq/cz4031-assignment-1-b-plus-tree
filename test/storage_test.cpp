@@ -10,6 +10,8 @@
 #include "storage.h"
 #include "utils.h"
 
+using namespace std;
+
 void testStorageQuery() {
 	Storage storage(19 * 10 * 5, 19 * 3);
 
@@ -31,9 +33,6 @@ void testStorageQuery() {
 
 	auto gotEntries = storage.query(blocks["tt0000001"], 1, 49);
 	for (auto entry : gotEntries) std::cout << entry.toString() << std::endl;
-<<<<<<< HEAD
-}
-=======
 }
 
 
@@ -65,4 +64,8 @@ void testStorageDelete() {
 	for (auto entry : gotEntries) std::cout << entry.toString() << std::endl;
 
 }
->>>>>>> 6df57767e1bbd3cfcd42008086d69026dde3de95
+
+//void testBPTreeInsert() {
+//
+//}
+

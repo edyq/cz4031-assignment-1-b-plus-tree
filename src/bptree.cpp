@@ -5,12 +5,12 @@
 #include <algorithm>
 using namespace std;
 
-Node::Node(int maxNumKeys, Node *parentPtr, bool isLeaf) {
-    parentPtr = parentPtr;
+Node::Node(int maxNumKeys, Node *parentPointer, bool isLeafNode) {
+    parentPtr = parentPointer;
     keys = * new vector<uint32_t>;
     numKeys = 0;
     maxKeys = maxNumKeys;
-    isLeaf = isLeaf;
+    isLeaf = isLeafNode;
     pointers = * new vector<Node *>;
     blocks = * new vector<vector<shared_ptr<Block>>>;
     nextNode = nullptr;
@@ -56,7 +56,7 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
         }
 
         // at leaf node now;
-        int keyIndex = int(find(cursor->keys.begin(), cursor->keys.end(), key) - cursor->keys.end());
+        uint32_t keyIndex = uint32_t (find(cursor->keys.begin(), cursor->keys.end(), key) - cursor->keys.end());
         if (keyIndex < cursor->keys.size()) {
             // no new key needs to be inserted
             cursor->blocks[keyIndex].push_back(blockAddress);
@@ -80,10 +80,10 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
 
                 vector<uint32_t> tempKeyVector = cursor->keys;
                 vector<vector<shared_ptr<Block>>> tempBlockVector = cursor->blocks;
-                Node *nextNode = cursor->pointers[-1];      // leaf nodes have only one pointer to other nodes
 
                 int i = 0;
                 while (i < maxKeys and key > tempKeyVector[i]) i++;
+
                 tempKeyVector.insert(tempKeyVector.begin() + i, key);
                 vector<shared_ptr<Block>> newVector = {blockAddress};
                 tempBlockVector.insert(tempBlockVector.begin() + i, newVector);
@@ -102,7 +102,11 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
                 cursor->nextNode = newLeafNode;
                 newLeafNode->preNode = cursor;
 
+                numNodes ++;
+
+                // update the parent
                 if (cursor == root) {
+                    // if the current node is root itself, we need a new root
                     Node *newRoot = new Node(maxKeys, nullptr, false);
 
                     newRoot->keys.push_back(newLeafNode->keys[0]);
@@ -110,7 +114,13 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
                     newRoot->pointers.push_back(newLeafNode);
                     newRoot->numKeys += 1;
                     root = newRoot;
+                    cursor->parentPtr = root;
+                    newLeafNode->parentPtr = root;
+
+                    numNodes += 2;
+                    levels ++;
                 } else {
+                    // update the internal parent
                     updateInternalParent(newLeafNode->keys[0], parentNode, newLeafNode);
                 }
             }
@@ -135,8 +145,51 @@ void BPTree::updateInternalParent(uint32_t key, Node *cursor, Node *newLeafNode)
         // update numKeys
         cursor->numKeys += 1;
     } else {
-        // the parent no longer has space; do recursion here
+        // the parent no longer has space; need to split the parent also, and continue checking parent of the parent
         Node *newInternalNode = new Node(maxKeys, nullptr, false);
+        Node *parentPtr = cursor->parentPtr;
 
+        vector<uint32_t> tempKeyVector = cursor->keys;
+        vector<Node *> tempPtrVector = cursor->pointers;
+
+        int i = 0;
+        while (key > cursor->keys[i] && i < cursor->numKeys) i++;
+
+        tempKeyVector.insert(tempKeyVector.begin() + i, key);
+        tempPtrVector.insert(tempPtrVector.begin() + i, newLeafNode);
+
+        cursor->numKeys = (maxKeys + 1) / 2;
+        newInternalNode->numKeys = maxKeys - (maxKeys + 1) / 2;
+
+        cursor->keys = vector<uint32_t>(tempKeyVector.begin(), tempKeyVector.begin() + cursor->numKeys - 1);
+        newInternalNode->keys = vector<uint32_t>(tempKeyVector.begin() + cursor->numKeys, tempKeyVector.end());
+
+        cursor->pointers = vector<Node *>(tempPtrVector.begin(), tempPtrVector.begin() + cursor->numKeys - 1);
+        newInternalNode->pointers = vector<Node *>(tempPtrVector.begin() + cursor->numKeys, tempPtrVector.end());
+
+        newInternalNode->parentPtr = cursor->parentPtr;
+
+        numNodes ++;
+
+        // update the parent
+        if (cursor == root) {
+            // if the current node is root itself, we need a new root
+            Node *newRoot = new Node(maxKeys, nullptr, false);
+
+            newRoot->keys.push_back(newInternalNode->keys[0]);
+            newRoot->pointers.push_back(cursor);
+            newRoot->pointers.push_back(newInternalNode);
+            newRoot->numKeys += 1;
+            root = newRoot;
+
+            cursor->parentPtr = root;
+            newInternalNode->parentPtr = root;
+
+            numNodes += 2;
+            levels ++;
+        } else {
+            // parent is internal,
+            updateInternalParent(newInternalNode->keys[0], cursor->parentPtr, newInternalNode);
+        }
     }
 }
