@@ -1,6 +1,5 @@
 #include "bptree.h"
 #include "block.h"
-#include "types.h"
 #include "iostream"
 #include <vector>
 #include <algorithm>
@@ -110,4 +109,4 @@ void BPTree::removeInternal(uint32_t key) {
     return ;
 }
 
-vector<SearchResult> BPTree::search(uint32_t lbKey, uint32_t ubTree) {}
+vector<SearchResult> BPTree::search(uint32_t lbKey, uint32_t ubKey) {}

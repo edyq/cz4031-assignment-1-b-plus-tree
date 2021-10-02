@@ -8,7 +8,6 @@
 
 #include "block.h"
 #include <vector>
-#include "types.h"
 using namespace std;
 typedef int KEY_TYPE;
 
@@ -54,6 +53,10 @@ public:
     ~Node(){};
 };
 
+struct SearchResult {
+    vector<Node *> accessedNodes;
+    vector<shared_ptr<Block>> accessedBlocks;
+};
 
 class BPTree {
 private:
