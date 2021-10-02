@@ -28,7 +28,7 @@ void BPlusTree::insert(uint32_t key, vector<shared_ptr<Block>> b)
         if (leaf->getSize() == numKeys)
         {
             // printf("Spliting leaf node\n");
-            LeafNode *newNode = leaf->split(key, p);
+            LeafNode *newNode = leaf->split(key, b);
             newNode->setNextNode(leaf->getNextNode());
             leaf->setNextNode(newNode);
             float firstKey = newNode->getFirstKey();
@@ -50,7 +50,7 @@ void BPlusTree::insert(uint32_t key, vector<shared_ptr<Block>> b)
         }
         else
         {
-            leaf->insertRec(key, p);
+            leaf->insertRec(key, b);
         }
     }
 }
