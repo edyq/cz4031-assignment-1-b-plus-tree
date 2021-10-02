@@ -418,7 +418,11 @@ void BPTree::updateInternalParent(uint32_t key, Node *cursor, Node *newLeafNode)
             // if the current node is root itself, we need a new root
             Node *newRoot = new Node(maxKeys, nullptr, false);
 
-            newRoot->keys.push_back(newInternalNode->keys[0]);
+            Node* travel = newInternalNode->pointers[0];
+            while (!travel->isLeaf) {
+                travel = travel->pointers[0];
+            }
+            newRoot->keys.push_back(travel->getKeys()[0]);
             newRoot->pointers.push_back(cursor);
             newRoot->pointers.push_back(newInternalNode);
             newRoot->numKeys += 1;
