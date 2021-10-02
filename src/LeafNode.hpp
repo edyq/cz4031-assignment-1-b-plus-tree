@@ -30,7 +30,7 @@ public:
     void moveLastToFrontOf(LeafNode *recipient, int orderOfThisChildNode);
     std::string toString() const override;
     void joinTwoNodes(LeafNode *recipientNode, int nodeToDelete_index, InternalNode *parent);
-    void appendChildNodes(vector<shared_ptr<Block>> blocks);
+    void appendChildNodes(vector<vector<shared_ptr<Block>>> blocks);
 //    void appendChildNodes(vector<RecordPointer> records);
     vector<uint32_t> getAllkeys();
     void removeKey(int index);

@@ -38,7 +38,7 @@ vector<shared_ptr<Block>> *LeafNode::getBlock(uint32_t key)
     {
         if (this->keys[i] == key)
         {
-            return this->blocks[i];  // TODO: error
+            return &(this->blocks[i]);
         }
     }
     return {};
@@ -56,7 +56,7 @@ void LeafNode::insertRec(uint32_t key, vector<shared_ptr<Block>> blockAddress)
         if (this->keys[i] > key)
         {
             this->keys.insert(keys.begin() + i, key);
-            this->blocks.insert(blockAddress.begin() + i, p);  // TODO: p does not exist
+            this->blocks.insert(blockAddress.begin() + i, p);  // TODO: p does not exist, what are you trying to do where??? Can't understand the logic
             this->size += 1;
             return;
         }
@@ -74,10 +74,10 @@ LeafNode *LeafNode::split(uint32_t key, vector<shared_ptr<Block>> b)
     for (int i = 0; i < (numKeys + 1) / 2; i++)
     {
         uint32_t newKey = *(keys.begin() + numKeys / 2 + 1);
-        shared_ptr<Block> newBlk = *(blocks.begin() + numKeys / 2 + 1);
+        auto newBlk = *(blocks.begin() + numKeys / 2 + 1);
         keys.erase(keys.begin() + numKeys / 2 + 1);
         blocks.erase(blocks.begin() + numKeys / 2 + 1);
-        newLeaf->insertRec(newKey, newRec);  // TODO: where is newRec?
+        newLeaf->insertRec(newKey, newBlk);  // TODO: verify
     }
     this->size = numKeys / 2 + 1;
     return newLeaf;
@@ -132,9 +132,9 @@ void LeafNode::moveFirstToEndOf(LeafNode *recipientNode)
     parentNode->setKey(0, keyToParent);
     recipientNode->keys.push_back(keyToRecipient);
 
-    shared_ptr<Block> child = this->blocks.at(0);
+    auto child = this->blocks.at(0); // TODO: verify
     this->blocks.erase(this->blocks.begin());
-    recipientNode-blocks.push_back(child);
+    recipientNode->blocks.push_back(child);
 }
 
 // TODO: FIX ME
@@ -147,11 +147,10 @@ void LeafNode::moveLastToFrontOf(LeafNode *recipientNode, int orderOfThisChildNo
     parentNode->setKey(0, keyToParent);
     recipientNode->keys.insert(keys.begin(), keyToRecipient);
 
-    printf("this->recPointer size = %d\n",&(this->recPointer.at(0)));  // TODO: error
-    shared_ptr<Block> child = this->blocks.back();  // TODO: error
+    auto child = this->blocks.back();  // TODO: verify
 
     this->blocks.erase(this->blocks.end());
-    recipientNode->blocks.insert(blocks.begin(), child);
+    recipientNode->blocks.push_back(child);
 }
 
 bool LeafNode::isRoot() 
@@ -193,11 +192,12 @@ void LeafNode::joinTwoNodes(LeafNode *recipientNode, int nodeToDelete_index, Int
     // printf("%d\n",parentNode->isRoot());
 }
 
-void LeafNode::appendChildNodes(vector<shared_ptr<Block>> blocks)
+// TODO: verify the logic
+void LeafNode::appendChildNodes(vector<vector<shared_ptr<Block>>> blocks)
 {
-    for (shared_ptr<Block> block : blocks)
+    for (auto block : blocks)
     {
-    	//        this->blocks.insert(this->blocks.begin(), block); // TODO: error: no matching member function for call to 'insert'
+    	this->blocks.push_back(block); // TODO: Verify the logic
     }
 }
 
@@ -237,31 +237,3 @@ uint32_t LeafNode::getKey(int index)
 {
     return this->keys.at(index);
 }
-
-//vector<RecordPointer> LeafNode::getAllRecPtrs()
-//{
-//    return this->recPointer;
-//}
-//
-//vector<Record *> LeafNode::getAllRecs()
-//{
-//    vector<RecordPointer> allRecPtr;
-//    vector<Record *> allRec;
-//    allRecPtr = this->recPointer;
-//
-//    for (auto recPtr : allRecPtr)
-//    {
-//        Block *blk;
-//        int offset;
-//        Record *rec;
-//
-//        // blk = recPtr.getBlock();
-//        // offset = recPtr.getOffset();
-//        // rec = blk->getRecords()[offset];
-//        rec = this->disk->getRecord(recPtr);
-//
-//        allRec.push_back(rec);
-//    }
-//
-//    return allRec;
-//}
