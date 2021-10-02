@@ -4,6 +4,7 @@
 #include <vector>
 #include <queue>
 #include "Node.hpp"
+#include "block.h"
 //#include "Record.hpp"
 #include "LeafNode.hpp"
 #include "InternalNode.hpp"
@@ -12,10 +13,10 @@ using namespace std;
 class BPlusTree
 {
 public:
-    BPlusTree(Disk *disk, int numKeys);
+    BPlusTree(int numKeys);
     void insert(uint32_t key, vector<shared_ptr<Block>> b);
     void remove(uint32_t key);
-    vector<Record> searchRecord(float startKey, float endKey);
+    vector<shared_ptr<Block>> BPlusTree::searchRecord(uint32_t startKey, uint32_t endKey)
 
     // Printer methods usde to print cpmplete or part of bpt
     void printTree();
@@ -28,7 +29,7 @@ public:
     // Below are helper functions
 
     // find the leaf node that stores the given key
-    LeafNode *findLeafNode(float key);
+    LeafNode *findLeafNode(uint32_t key);
     // insert a node into a given parent node
     void insertInternal(InternalNode *parentNode, float key, Node *childNode);
     bool isEmptyTree();
@@ -44,6 +45,5 @@ private:
     // number of child nodes = number of Keys + 1
     int numKeys;
     Node *rootNode;
-    Disk *disk;
     void adjustRoot();
 };
