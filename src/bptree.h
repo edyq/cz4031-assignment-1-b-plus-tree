@@ -76,6 +76,8 @@ public:
 
     vector<SearchResult> search(uint32_t lbKey, uint32_t ubKey);
 
+    SearchResult searchKey(uint32_t key);
+
     void insert(uint32_t key, shared_ptr<Block> blockAddress);
 
     void remove(uint32_t key);
