@@ -13,7 +13,7 @@ class BPlusTree
 {
 public:
     BPlusTree(Disk *disk, int numKeys);
-    void insert(float key, RecordPointer p);
+    void insert(uint32_t key, vector<shared_ptr<Block>> b);
     void remove(float key);
     vector<Record> searchRecord(float startKey, float endKey);
 
