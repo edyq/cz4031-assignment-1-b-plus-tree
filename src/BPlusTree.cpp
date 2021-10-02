@@ -14,15 +14,15 @@ BPlusTree::BPlusTree(Disk *disk, int numKeys)
     this->rootNode = new LeafNode(disk, numKeys);
 }
 
-void BPlusTree::insert(float key, RecordPointer p)
+void BPlusTree::insert(uint32_t key, vector<shared_ptr<Block>> b)
 {
     // printf("inserting record with key %.1f into leaf node\n", key);
     LeafNode *leaf = findLeafNode(key);
     // printf("found leafNode starting key %.1f\n", leaf->getFirstKey());
-    RecordPointer *pos = leaf->getRecPointer(key);
-    if (pos)
+    auto block = leaf->getBlock(key);
+    if (block)
     {
-        leaf->chainRec(key, p);
+        block->push_back(b);
     }
     else
     {
