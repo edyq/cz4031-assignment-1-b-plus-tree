@@ -22,22 +22,6 @@ LeafNode::LeafNode(int numKeys) : Node(numKeys)
     this->blocks = vector<vector<shared_ptr<Block>>>(1);
 }
 
-//LeafNode::LeafNode(Disk *disk, int numKeys) : Node(numKeys)
-//{
-//    this->disk = disk;
-//    this->numKeys = numKeys;
-//    this->minNumKeys = (numKeys + 1) / 2;
-//    this->parentNode = NULL;
-//    size = 0;
-//    // for (int i = 0; i < numKeys; i++)
-//    // {
-//    //     this->keys.push_back(0);
-//    //     this->childNodes.push_back(NULL);
-//    // }
-//    this->nextNode = NULL;
-//    this->blocks = vector<vector<shared_ptr<Block>>>(1);
-//}
-
 bool LeafNode::isLeafNode() const
 {
     return true;
@@ -59,34 +43,6 @@ vector<shared_ptr<Block>> *LeafNode::getBlock(uint32_t key)
     }
     return {};
 }
-
-//Record *LeafNode::getRec(uint32_t key)
-//{
-//    RecordPointer *recPtr;
-//    recPtr = this->getRecPointer(key);
-//
-//    return this->disk->getRecord(*recPtr);
-//    // Block *blk;
-//    // blk = recPtr->getBlock();
-//    // int offset = recPtr->getOffset();
-//
-//    // return blk->getRecords()[offset];
-//
-//    // return this->getRecPointer(key)->getBlock()->getRecords()[this->getRecPointer(key)->getOffset()];
-//}
-//
-//void LeafNode::chainRec(uint32_t key, RecordPointer p)
-//{
-//    for (int i = 0; i < size; i++)
-//    {
-//        if (this->keys[i] == key)
-//        {
-//            Record * currentRec = this->disk->getRecord(p);
-//            this->disk->addRecord(currentRec, this->recPointer[i]);
-//            this->recPointer[i] = p;
-//        }
-//    }
-//}
 
 int LeafNode::getSize()
 {
@@ -181,6 +137,7 @@ void LeafNode::moveFirstToEndOf(LeafNode *recipientNode)
     recipientNode-blocks.push_back(child);
 }
 
+// TODO: FIX ME
 void LeafNode::moveLastToFrontOf(LeafNode *recipientNode, int orderOfThisChildNode)
 {
     uint32_t keyToParent = this->keys.back();
@@ -229,7 +186,7 @@ void LeafNode::joinTwoNodes(LeafNode *recipientNode, int nodeToDelete_index, Int
     // add the nodeToDelete's keys to the end of recipient keys
     recipientNode->appendKeys(this->getAllkeys());
     // add the nodeToDelete's childnodes to the end of recipient childnodes
-    recipientNode->appendChildNodes(this->blocks);
+    recipientNode->appendChildNodes(this->blocks);  // TODO:  error: no viable conversion from 'vector<vector<shared_ptr<Block>>>' to 'vector<shared_ptr<Block>>'
     // clear nodeTodeDelete
     this->clearKeysAndNodes();
     // std::cout << " " << parentNode->getParent()->toString();
@@ -240,7 +197,7 @@ void LeafNode::appendChildNodes(vector<shared_ptr<Block>> blocks)
 {
     for (shared_ptr<Block> block : blocks)
     {
-        this->blocks.insert(this->blocks.begin(), block);
+    	//        this->blocks.insert(this->blocks.begin(), block); // TODO: error: no matching member function for call to 'insert'
     }
 }
 

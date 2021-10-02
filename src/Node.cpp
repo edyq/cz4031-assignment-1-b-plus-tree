@@ -11,12 +11,6 @@ Node::Node(int numKeys)
 {
     this->numKeys = numKeys;
     this->parentNode = NULL;
-    // for (int i = 0; i < numKeys; i++)
-    // {
-    //     this->keys.push_back(0);
-    //     this->childNodes.push_back(NULL);
-    // }
-    // this->childNodes.push_back(NULL);
 }
 
 Node::~Node() {}

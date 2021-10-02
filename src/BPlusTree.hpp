@@ -16,7 +16,7 @@ public:
     BPlusTree(int numKeys);
     void insert(uint32_t key, vector<shared_ptr<Block>> b);
     void remove(uint32_t key);
-    vector<shared_ptr<Block>> BPlusTree::searchRecord(uint32_t startKey, uint32_t endKey)
+    vector<shared_ptr<Block>> searchRecord(uint32_t startKey, uint32_t endKey);
 
     // Printer methods usde to print cpmplete or part of bpt
     void printTree();
@@ -31,7 +31,7 @@ public:
     // find the leaf node that stores the given key
     LeafNode *findLeafNode(uint32_t key);
     // insert a node into a given parent node
-    void insertInternal(InternalNode *parentNode, float key, Node *childNode);
+    void insertInternal(InternalNode *parentNode, uint32_t key, Node *childNode);
     bool isEmptyTree();
     template <typename N>
     void adjustNode(N *node);
