@@ -67,7 +67,9 @@ class Storage {
      * @param upperBound upper bound of numVotes
      * @return a vector of Entry objects
      */
-    std::vector<Entry> query(std::shared_ptr<Block> block, double lowerBound, double upperBound);
+    std::vector<Entry> query(std::shared_ptr<Block> block, uint32_t lowerBound, uint32_t upperBound);
+
+    static void print(std::shared_ptr<Block> block);
 
    private:
     size_t total_size_;

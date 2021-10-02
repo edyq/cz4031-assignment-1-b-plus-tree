@@ -63,7 +63,7 @@ bool Storage::deleteEntry(std::shared_ptr<Block> block, const char *tconst) {
 	return false;
 }
 
-std::vector<Entry> Storage::query(std::shared_ptr<Block> block, double lowerBound, double upperBound) {
+std::vector<Entry> Storage::query(std::shared_ptr<Block> block, uint32_t lowerBound, uint32_t upperBound) {
 	std::vector<Entry> result;
 	auto start = block->getPtr(), end = block->getWritePtr();
 	for (auto ptr = start; ptr < end; advanceToNextEntry(ptr)) {
@@ -75,4 +75,13 @@ std::vector<Entry> Storage::query(std::shared_ptr<Block> block, double lowerBoun
 		}
 	}
 	return result;
+}
+
+void Storage::print(std::shared_ptr<Block> block) {
+	auto start = block->getPtr(), end = block->getWritePtr();
+	for (auto ptr = start; ptr < end; advanceToNextEntry(ptr)) {
+		Entry entry = charsToEntry(ptr);
+		std::cout << entry.tconst << "|";
+	}
+	std::cout << std::endl;
 }
