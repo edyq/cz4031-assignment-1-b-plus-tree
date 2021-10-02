@@ -48,7 +48,7 @@ LeafNode::~LeafNode()
 }
 
 //RecordPointer *LeafNode::getRecPointer(uint32_t key)
-<vector<shared_ptr<Block>> *LeafNode::getBlock(uint32_t key)
+vector<shared_ptr<Block> LeafNode::getBlock(uint32_t key)
 {
     for (int i = 0; i < size; i++)
     {
@@ -57,7 +57,7 @@ LeafNode::~LeafNode()
             return &(this->blocks[i]);
         }
     }
-    return NULL;
+    return;
 }
 
 //Record *LeafNode::getRec(uint32_t key)
@@ -197,124 +197,99 @@ void LeafNode::moveLastToFrontOf(LeafNode *recipientNode, int orderOfThisChildNo
     recipientNode->blocks.insert(blocks.begin(), child);
 }
 
-//void LeafNode::copySingle(uint32_t startKey, uint32_t endKey, vector<Record> &aVector)
-//{
-//    bool found = false;
-//    //cout << this->keys.size() << endl;
-//    for (auto key : this->keys)
-//    {
-//        if (key >= startKey && key <= endKey)
-//        {
-//            found = true;
-//        }
-//        else
-//            found = false;
-//        if (found)
-//        {
-//            Record *temp = getRec(key);
-//            aVector.push_back(*temp);
-//            RecordPointer *rp = this->getRecPointer(key);
-//            // cout << "Block address: " << rp->getBlockAddress() <<endl;
-//            // printCurrentBlock(key, rp);
-//            while (temp->nextRec.getOffset()!=-1 && temp->nextRec.getBlockAddress()!=-1)
-//            {
-//                // cout << "Block address: " << (temp->nextRec).getBlockAddress() <<endl;
-//                // printCurrentBlock(key, &temp->nextRec);
-//                temp = this->disk->getRecord(temp->nextRec);
-//                aVector.push_back(*temp);
-//            }
-//        }
-//    }
-//}
+void LeafNode::copySingle(uint32_t startKey, uint32_t endKey, vector<Block *> &blocks)
+{
+    this->keys
+}
 
-//void LeafNode::printCurrentBlock(uint32_t key, RecordPointer* rp){
-//    Block* tempB = disk->getBlock(rp->getBlockAddress());
-//    for(auto r : tempB->getRecords()){
-//        cout << "Block details: " << r->toString() << endl;
-//    }
-//}
+void LeafNode::printCurrentBlock(uint32_t key, RecordPointer* rp){
+    Block* tempB = disk->getBlock(rp->getBlockAddress());
+    for(auto r : tempB->getRecords()){
+        cout << "Block details: " << r->toString() << endl;
+    }
+}
 
-//void LeafNode::copyStart(uint32_t startKey, vector<Record> &aVector)
-//{
-//    bool found = false;
-//    //cout << this->keys.size() << endl;
-//    for (auto key : this->keys)
-//    {
-//        if (key >= startKey)
-//        {
-//            found = true;
-//        }
-//        if (found)
-//        {
-//            Record *temp = getRec(key);
-//            aVector.push_back(*temp);
-//             RecordPointer *rp = this->getRecPointer(key);
-//            // cout << "Block address: " << rp->getBlockAddress() <<endl;
-//            // printCurrentBlock(key, rp);
-//            while(temp->nextRec.getOffset()!=-1 && temp->nextRec.getBlockAddress()!=-1)
-//            {
-//                // cout << "Block address: " << (temp->nextRec).getBlockAddress() << "\n" << endl;
-//                // printCurrentBlock(key, &temp->nextRec);
-//                temp = this->disk->getRecord(temp->nextRec);
-//                aVector.push_back(*temp);
-//            }
-//        }
-//    }
-//}
-//
-//void LeafNode::copyEnd(uint32_t endKey, vector<Record> &aVector)
-//{
-//    bool found = false;
-//    for (auto key : this->keys)
-//    {
-//        if (key > endKey)
-//        {
-//            found = true;
-//            return;
-//        }
-//        if (!found)
-//        {
-//            Record *temp = getRec(key);
-//            aVector.push_back(*temp);
-//            RecordPointer *rp = this->getRecPointer(key);
-//            // cout << "Block address: " << rp->getBlockAddress() <<endl;
-//            // printCurrentBlock(key, rp);
-//            while(temp->nextRec.getOffset()!=-1 && temp->nextRec.getBlockAddress()!=-1){
-//                // cout << "Block address: " << (temp->nextRec).getBlockAddress() <<endl;
-//                // printCurrentBlock(key, &temp->nextRec);
-//                temp = this->disk->getRecord(temp->nextRec);
-//                aVector.push_back(*temp);
-//                //std::cout << "key: " << key << " Rating: " << temp->averageRating << endl;
-//            }
-//        }
-//        if (key >= endKey)
-//        {
-//            std::cout << "Reach Endkey..." << endl;
-//            found = true;
-//            return;
-//        }
-//    }
-//}
-//
-//void LeafNode::copyRange(vector<Record> &aVector)
-//{
-//    for (auto key : this->keys)
-//    {
-//        Record *temp = getRec(key);
-//        aVector.push_back(*temp);
-//        RecordPointer *rp = this->getRecPointer(key);
-//        // cout << "Block address: " << rp->getBlockAddress() <<endl;
-//        // printCurrentBlock(key, rp);
-//        while (temp->nextRec.getOffset()!=-1 && temp->nextRec.getBlockAddress()!=-1)
-//        {
-//            //cout << "Block address: " << (temp->nextRec).getBlockAddress() <<endl;
-//            //printCurrentBlock(key, &temp->nextRec);
-//            temp = this->disk->getRecord(temp->nextRec);
-//            aVector.push_back(*temp);
-//
-//        }
-//    }
-//}
+void LeafNode::copyStart(uint32_t startKey, vector<Record> &aVector)
+{
+    bool found = false;
+    //cout << this->keys.size() << endl;
+    for (auto key : this->keys)
+    {
+        if (key >= startKey)
+        {
+            found = true;
+        }
+        if (found)
+        {
+            Record *temp = getRec(key);
+            aVector.push_back(*temp);
+             RecordPointer *rp = this->getRecPointer(key);
+            // cout << "Block address: " << rp->getBlockAddress() <<endl;
+            // printCurrentBlock(key, rp);
+            while(temp->nextRec.getOffset()!=-1 && temp->nextRec.getBlockAddress()!=-1)
+            {
+                // cout << "Block address: " << (temp->nextRec).getBlockAddress() << "\n" << endl;
+                // printCurrentBlock(key, &temp->nextRec);
+                temp = this->disk->getRecord(temp->nextRec);
+                aVector.push_back(*temp);
+            }
+        }
+    }
+}
+
+void LeafNode::copyEnd(uint32_t endKey, vector<Record> &aVector)
+{
+    bool found = false;
+    for (auto key : this->keys)
+    {
+        if (key > endKey)
+        {
+            found = true;
+            return;
+        }
+        if (!found)
+        {
+            Record *temp = getRec(key);
+            aVector.push_back(*temp);
+            RecordPointer *rp = this->getRecPointer(key);
+            // cout << "Block address: " << rp->getBlockAddress() <<endl;
+            // printCurrentBlock(key, rp);
+            while(temp->nextRec.getOffset()!=-1 && temp->nextRec.getBlockAddress()!=-1){
+                // cout << "Block address: " << (temp->nextRec).getBlockAddress() <<endl;
+                // printCurrentBlock(key, &temp->nextRec);
+                temp = this->disk->getRecord(temp->nextRec);
+                aVector.push_back(*temp);
+                //std::cout << "key: " << key << " Rating: " << temp->averageRating << endl;
+            }
+        }
+        if (key >= endKey)
+        {
+            std::cout << "Reach Endkey..." << endl;
+            found = true;
+            return;
+        }
+    }
+}
+
+void LeafNode::copyRange(vector<Record> &aVector)
+{
+    for (auto key : this->keys)
+    {
+        Record *temp = getRec(key);
+        aVector.push_back(*temp);
+        RecordPointer *rp = this->getRecPointer(key);
+        // cout << "Block address: " << rp->getBlockAddress() <<endl;
+        // printCurrentBlock(key, rp);
+        while (temp->nextRec.getOffset()!=-1 && temp->nextRec.getBlockAddress()!=-1)
+        {
+            //cout << "Block address: " << (temp->nextRec).getBlockAddress() <<endl;
+            //printCurrentBlock(key, &temp->nextRec);
+            temp = this->disk->getRecord(temp->nextRec);
+            aVector.push_back(*temp);
+
+        }
+    }
+}
 
 bool LeafNode::isRoot() 
 {

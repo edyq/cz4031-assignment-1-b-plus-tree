@@ -112,35 +112,14 @@ vector<Block *> BPlusTree::searchRecord(float startKey, float endKey)
         printf("Not found startLeaf or endLeaf...\n");
         return results;
     }
-    printf("Start first leaf copying..\n");
 
-    if (startLeaf == endLeaf)
-    {
-        printf("Only one leaf node required..\n");
-        startLeaf->copySingle(startKey, endKey, results);
-    }
-    else
-    {
-        printf("More than one leaf node required..\n");
-        startLeaf->copyStart(startKey, results);
-        printf("Go next node..\n");
-        startLeaf = startLeaf->getNextNode();
-        while (startLeaf != endLeaf)
-        {
-            startLeaf->copyRange(results);
-            startLeaf = startLeaf->getNextNode();
-            printf("Go next node..\n");
-        }
-        startLeaf->copyEnd(endKey, results);
-    }
-
-    for (Record entry : results)
-    {
-        std::cout << "Record ID: " << entry.id << " Average Rating: " << entry.averageRating
-                  << " Num of Votes: " << entry.numVotes << endl;
-    }
-    std::cout << "Finish searching... " << endl;
-    /* To Print Search results */
+    do {
+    	auto keys = startLeaf->getAllkeys();
+    	for (auto key : keys) {
+    		auto startLeaf->getBlock(key);
+    	}
+    	startLeaf = startLeaf->getNextNode();
+    } while (startLeaf != endLeaf);
     return results;
 }
 

@@ -26,10 +26,10 @@ public:
     LeafNode *split(uint32_t key, shared_ptr<Block> b);
 //    LeafNode *split(uint32_t key, RecordPointer p);
     void setNextNode(LeafNode *nextNode);
-//    void copySingle(uint32_t startKey, uint32_t endKey, vector<Record> &aVector);
-//    void copyStart(uint32_t aKey, vector<Record> &aVector);
-//    void copyEnd(uint32_t aKey, vector<Record> &aVector);
-//    void copyRange(vector<Record> &aVector);
+    void copySingle(uint32_t startKey, uint32_t endKey, vector<Record> &aVector);
+    void copyStart(uint32_t aKey, vector<Record> &aVector);
+    void copyEnd(uint32_t aKey, vector<Record> &aVector);
+    void copyRange(vector<Record> &aVector);
     LeafNode *getNextNode();
     void removeRec(uint32_t key);
     int getMinNumKeys();
@@ -47,7 +47,7 @@ public:
 //    void printCurrentBlock(uint32_t key, RecordPointer* rp);
     uint32_t getKey(int index);
 //    RecordPointer *getRecPointer(uint32_t key);
-    <vector<shared_ptr<Block>> *getBlock(uint32_t key);
+    vector<shared_ptr<Block> getBlock(uint32_t key);
 //    Record *getRec(uint32_t key);
 //    vector<RecordPointer> getAllRecPtrs();
 //    vector<Record *> getAllRecs();
