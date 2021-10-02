@@ -240,6 +240,7 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
             }
         }
         cursor = cursor->nextNode;
+        if (cursor == nullptr) break;
         if (cursor->keys[0] > ubKey) break;
     }
     return result;

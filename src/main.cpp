@@ -86,7 +86,7 @@ void printAvg(Storage& storage, set<shared_ptr<Block>>& accessedBlocks, uint32_t
 
 void run_exp_3(Storage& storage, BPTree& indexTree) {
 	std::cout << "=========================" << std::endl;
-	std::cout << " Experiment 3:" << std::endl;
+	std::cout << "Experiment 3:" << std::endl;
 	/**
  	  * Experiment 3: retrieve those movies with the “numVotes” equal to 500 and report the following statistics:
 		- the number and the content of index nodes the process accesses
@@ -102,7 +102,7 @@ void run_exp_3(Storage& storage, BPTree& indexTree) {
 
 void run_exp_4(Storage& storage, BPTree& indexTree) {
 	std::cout << "=========================" << std::endl;
-	std::cout << " Experiment 4:" << std::endl;
+	std::cout << "Experiment 4:" << std::endl;
 	/**
      *  Experiment 4: retrieve those movies with the attribute “numVotes” from 30,000 to 40,000, both inclusively and report the following statistics:
 		- the number and the content of index nodes the process accesses
@@ -117,23 +117,26 @@ void run_exp_4(Storage& storage, BPTree& indexTree) {
 }
 
 void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& indexTree) {
+    std::vector<Entry> newVec(entries.begin(), entries.begin() + 100);  // FIXME: take only the first 100 for testing
+    entries = newVec;
     std::set<std::shared_ptr<Block>> used_blocks;
-    std::cout << "inseting..." << std::endl;
+    size_t i = 0;
     for (auto& entry: entries) {
         auto block_ptr = storage.insertEntry(entry);
+        std::cout << "inserting " << i++ << " out of " << entries.size() << std::endl;
         indexTree.insert(entry.numVotes, block_ptr);
         used_blocks.insert(block_ptr);
     }
     std::cout << "=========================" << std::endl;
-    std::cout << " Experiment 1:" << std::endl;
-    std::cout << "the number of blocks: " << used_blocks.size();
-    std::cout << "the size of database (in terms of MB)" << bytesToMb(entries.size() * Entry::size);
+    std::cout << "Experiment 1:" << std::endl;
+    std::cout << "the number of blocks: " << used_blocks.size() << std::endl;
+    std::cout << "the size of database (in terms of MB) " << bytesToMb(entries.size() * Entry::size) << std::endl;
 
     std::cout << "=========================" << std::endl;
-    std::cout << " Experiment 2:" << std::endl;
-    std::cout << "parameter n of the B+ tree" << indexTree.getMaxKeys();
-    std::cout << "the number of nodes of the B+ tree" << indexTree.getNumNodes();
-    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree" << indexTree.getLevels();
+    std::cout << "Experiment 2:" << std::endl;
+    std::cout << "parameter n of the B+ tree: " << indexTree.getMaxKeys() << std::endl;
+    std::cout << "the number of nodes of the B+ tree: " << indexTree.getNumNodes() << std::endl;
+    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree: " << indexTree.getLevels() << std::endl;
     auto rootNode = indexTree.getRoot();
     std::cout << "the content of the root node: ";
     printVector<uint32_t>(rootNode->getKeys());
@@ -148,7 +151,7 @@ void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& inde
 
     // Experiment 5
     std::cout << "=========================" << std::endl;
-    std::cout << " Experiment 5:" << std::endl;
+    std::cout << "Experiment 5:" << std::endl;
     /**
      * Experiment 5: delete those movies with the attribute “numVotes” equal to 1,000, update the B+ tree accordingly, and report the following statistics:
 		- the number of times that a node is deleted (or two nodes are merged) during the process of the updating the B+ tree
