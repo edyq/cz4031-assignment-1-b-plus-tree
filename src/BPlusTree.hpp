@@ -14,7 +14,7 @@ class BPlusTree
 public:
     BPlusTree(Disk *disk, int numKeys);
     void insert(uint32_t key, vector<shared_ptr<Block>> b);
-    void remove(float key);
+    void remove(uint32_t key);
     vector<Record> searchRecord(float startKey, float endKey);
 
     // Printer methods usde to print cpmplete or part of bpt

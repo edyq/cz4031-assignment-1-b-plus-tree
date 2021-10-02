@@ -55,7 +55,7 @@ void BPlusTree::insert(uint32_t key, vector<shared_ptr<Block>> b)
     }
 }
 
-void BPlusTree::remove(float key)
+void BPlusTree::remove(uint32_t key)
 {
     if (!rootNode)
     {
@@ -68,7 +68,7 @@ void BPlusTree::remove(float key)
         printf("Key does not exist. Remove failed.\n");
         return;
     }
-    else if (!leafNode->getRec(key))
+    else if (!leafNode->getBlock(key))
     {
         printf("No record found for this key. Remove failed.\n");
         return;
@@ -83,7 +83,7 @@ void BPlusTree::remove(float key)
     }
 }
 
-LeafNode *BPlusTree::findLeafNode(float key)
+LeafNode *BPlusTree::findLeafNode(uint32_t key)
 {
 
     Node *node = rootNode;
