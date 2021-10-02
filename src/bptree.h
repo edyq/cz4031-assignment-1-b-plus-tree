@@ -8,6 +8,7 @@
 
 #include "block.h"
 #include <vector>
+#include <set>
 using namespace std;
 typedef int KEY_TYPE;
 
@@ -86,8 +87,8 @@ public:
 };
 
 struct SearchResult {
-    vector<Node *> accessedNodes;
-    vector<shared_ptr<Block>> accessedBlocks;
+    set<Node *> accessedNodes;
+    set<shared_ptr<Block>> accessedBlocks;
 };
 
 class BPTree {
@@ -106,7 +107,7 @@ public:
 
     ~BPTree(){};
 
-//    vector<SearchResult> search(uint32_t lbKey, uint32_t ubKey);
+    SearchResult search(uint32_t lbKey, uint32_t ubKey);
 
     void insert(uint32_t key, shared_ptr<Block> blockAddress);
 
