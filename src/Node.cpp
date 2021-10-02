@@ -33,7 +33,7 @@ int Node::getMaxKeySize()
     return this->numKeys;
 }
 
-void Node::replaceFirstKey(float key)
+void Node::replaceFirstKey(uint32_t key)
 {
     this->keys[0] = key;
 }

@@ -48,7 +48,7 @@ LeafNode::~LeafNode()
 }
 
 //RecordPointer *LeafNode::getRecPointer(uint32_t key)
-<vector<shared_ptr<Block>> *LeafNode::getBlock(uint32_t key)
+vector<shared_ptr<Block>> *LeafNode::getBlock(uint32_t key)
 {
     for (int i = 0; i < size; i++)
     {
@@ -93,7 +93,7 @@ int LeafNode::getSize()
     return this->keys.size();
 }
 
-void LeafNode::insertRec(uint32_t key, <vector<shared_ptr<Block>> blockAddress)
+void LeafNode::insertRec(uint32_t key, vector<shared_ptr<Block>> blockAddress)
 {
     for (int i = 0; i < this->size; i++)
     {
