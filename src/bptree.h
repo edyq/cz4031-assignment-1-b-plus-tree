@@ -49,9 +49,6 @@ public:
         return parentPtr;
     }
 
-    vector<uint32_t> getKeys() {
-        return keys;
-    }
 
     ~Node(){};
 };

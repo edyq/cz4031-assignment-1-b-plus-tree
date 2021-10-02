@@ -60,8 +60,10 @@ void BPTree::removeInternal(uint32_t key) {
         while (cur_node->numKeys < cur_node->maxKeys/2) {
             // borrow from preNode
             if (cur_node->preNode->numKeys >= cur_node->preNode->maxKeys/2+1){
-                cur_node->keys.insert(cur_node->keys.begin(), cur_node->preNode->keys.pop_back());
-                cur_node->pointers.insert(cur_node->pointers.begin(), cur_node->preNode->pointers.pop_back());
+                cur_node->keys.insert(cur_node->keys.begin(), cur_node->preNode->keys[cur_node->preNode->keys.size()-1]);
+                cur_node->preNode->keys.pop_back();
+                cur_node->pointers.insert(cur_node->pointers.begin(), cur_node->preNode->pointers[cur_node->preNode->pointers.size()-1]);
+                cur_node->preNode->pointers.pop_back();
                 cur_node->numKeys ++;
                 cur_node->preNode->numKeys --;
                 for (int i=0; i<cur_node->parentPtr->keys.size(); i++){
@@ -73,15 +75,13 @@ void BPTree::removeInternal(uint32_t key) {
             }
             if (cur_node->nextNode->numKeys >= cur_node->nextNode->maxKeys/2+1){
                 // borrow from nextNode
-                cur_node->keys.insert(cur_node->keys.begin(), cur_node->nextNode->keys.pop_back());
-                cur_node->pointers.insert(cur_node->pointers.begin(), cur_node->nextNode->pointers.pop_back());
+                cur_node->keys.push_back(cur_node->nextNode->keys[0]);
+                cur_node->nextNode->keys.erase(next(cur_node->nextNode->keys.begin()));
+                cur_node->pointers.push_back(cur_node->nextNode->pointers[0]);
+                cur_node->nextNode->pointers.erase(next(cur_node->nextNode->pointers.begin()));
                 cur_node->numKeys ++;
                 cur_node->nextNode->numKeys --;
-                for (int i=0; i<cur_node->parentPtr->keys.size(); i++){
-                    if (cur_node->parentPtr->keys[i] == cur_node->keys[1]){
-                        cur_node->parentPtr->keys[i] = cur_node->keys[0];
-                    }
-                }
+
                 break;
             }
             // cannot borrow, we need to do merge, and update recursively
