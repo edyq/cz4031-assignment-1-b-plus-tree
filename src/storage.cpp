@@ -76,4 +76,3 @@ std::vector<Entry> Storage::query(std::shared_ptr<Block> block, double lowerBoun
 	}
 	return result;
 }
-

@@ -54,6 +54,42 @@ void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& inde
     auto rootNode = indexTree.getRoot();
     std::cout << "the content of the root node: ";
     printVector<uint32_t>(rootNode->getKeys());
+
+    // Experiment 3
+    std::cout << "=========================" << std::endl;
+    std::cout << " Experiment 3:" << std::endl;
+    /**
+     * Experiment 3: retrieve those movies with the “numVotes” equal to 500 and report the following statistics:
+		- the number and the content of index nodes the process accesses
+		- the number and the content of data blocks the process accesses
+		- the average of “averageRating’s” of the records that are returned
+     */
+
+    //    vector<shared_ptr<??>>
+    //    vector<shared_ptr<Block>>
+    //    indexTree.search()
+
+    // Experiment 4
+    std::cout << "=========================" << std::endl;
+    std::cout << " Experiment 4:" << std::endl;
+    /**
+     *  Experiment 4: retrieve those movies with the attribute “numVotes” from 30,000 to 40,000, both inclusively and report the following statistics:
+		- the number and the content of index nodes the process accesses
+		- the number and the content of data blocks the process accesses
+		- the average of “averageRating’s” of the records that are returned
+     */
+
+
+    // Experiment 5
+    std::cout << "=========================" << std::endl;
+    std::cout << " Experiment 5:" << std::endl;
+    /**
+     * Experiment 5: delete those movies with the attribute “numVotes” equal to 1,000, update the B+ tree accordingly, and report the following statistics:
+		- the number of times that a node is deleted (or two nodes are merged) during the process of the updating the B+ tree
+		- the number nodes of the updated B+ tree
+		- the height of the updated B+ tree
+		- the content of the root node and its 1st child node of the updated B+ tree
+     */
 }
 
 int main(int argc, char* argv[]) {
