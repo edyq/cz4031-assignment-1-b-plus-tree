@@ -13,7 +13,7 @@ Node::Node(int maxNumKeys, Node *parentPointer, bool isLeafNode) {
     maxKeys = maxNumKeys;
     isLeaf = isLeafNode;
     pointers = vector<Node *>();
-    blocks = vector<vector<shared_ptr<Block>>>();
+    blocks = vector<vector<shared_ptr<Block>>>(maxKeys);
     nextNode = nullptr;
     preNode = nullptr;
 }
