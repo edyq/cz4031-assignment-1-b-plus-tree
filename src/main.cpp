@@ -167,7 +167,7 @@ int main(int argc, char* argv[]) {
     std::cout << "setting block size to " << argv[2] << " b" << std::endl;
     auto storage = Storage(/*total size*/ mbToBytes(std::atoi(argv[1])),
                            std::atoi(argv[2]));
-    auto bpIndexTree = BPTree(10);
+    auto bpIndexTree = BPTree(3);
 
     // read data from file
     std::cout << "loading data" << std::endl;

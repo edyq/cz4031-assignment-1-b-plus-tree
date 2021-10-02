@@ -2,6 +2,7 @@
 #include "block.h"
 #include "iostream"
 #include <vector>
+#include <memory>
 #include <algorithm>
 
 using namespace std;
@@ -13,7 +14,7 @@ Node::Node(int maxNumKeys, Node *parentPointer, bool isLeafNode) {
     maxKeys = maxNumKeys;
     isLeaf = isLeafNode;
     pointers = vector<Node *>();
-    blocks = vector<vector<shared_ptr<Block>>>(maxKeys);
+    blocks = vector<vector<shared_ptr<Block>>>(1);
     nextNode = nullptr;
     preNode = nullptr;
 }
@@ -175,6 +176,7 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
         if (cursor->keys[0] > ubKey) break;
     }
     return result;
+}
 
 // insert a record into the bptree
 void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
@@ -246,10 +248,10 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
                 cursor->numKeys = (maxKeys + 1) / 2;
                 newLeafNode->numKeys = (maxKeys + 1) - ((maxKeys + 1) / 2);
 
-                cursor->keys = vector<uint32_t>(tempKeyVector.begin(), tempKeyVector.begin() + cursor->numKeys - 1);
+                cursor->keys = vector<uint32_t>(tempKeyVector.begin(), tempKeyVector.begin() + cursor->numKeys);
                 newLeafNode->keys = vector<uint32_t>(tempKeyVector.begin() + cursor->numKeys, tempKeyVector.end());
 
-                cursor->blocks = vector<vector<shared_ptr<Block>>>(tempBlockVector.begin(), tempBlockVector.begin() + cursor->numKeys - 1);
+                cursor->blocks = vector<vector<shared_ptr<Block>>>(tempBlockVector.begin(), tempBlockVector.begin() + cursor->numKeys);
                 newLeafNode->blocks = vector<vector<shared_ptr<Block>>>(tempBlockVector.begin() + cursor->numKeys, tempBlockVector.end());
 
                 cursor->nextNode = newLeafNode;
@@ -270,8 +272,8 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
                     cursor->parentPtr = root;
                     newLeafNode->parentPtr = root;
 
-                    numNodes += 2;
-                    levels ++;
+                    numNodes++;
+                    levels++;
                 } else {
                     // update the internal parent
                     updateInternalParent(newLeafNode->keys[0], parentNode, newLeafNode);
@@ -314,10 +316,10 @@ void BPTree::updateInternalParent(uint32_t key, Node *cursor, Node *newLeafNode)
         cursor->numKeys = (maxKeys + 1) / 2;
         newInternalNode->numKeys = maxKeys - (maxKeys + 1) / 2;
 
-        cursor->keys = vector<uint32_t>(tempKeyVector.begin(), tempKeyVector.begin() + cursor->numKeys - 1);
+        cursor->keys = vector<uint32_t>(tempKeyVector.begin(), tempKeyVector.begin() + cursor->numKeys);
         newInternalNode->keys = vector<uint32_t>(tempKeyVector.begin() + cursor->numKeys, tempKeyVector.end());
 
-        cursor->pointers = vector<Node *>(tempPtrVector.begin(), tempPtrVector.begin() + cursor->numKeys - 1);
+        cursor->pointers = vector<Node *>(tempPtrVector.begin(), tempPtrVector.begin() + cursor->numKeys);
         newInternalNode->pointers = vector<Node *>(tempPtrVector.begin() + cursor->numKeys, tempPtrVector.end());
 
         newInternalNode->parentPtr = cursor->parentPtr;
@@ -338,7 +340,7 @@ void BPTree::updateInternalParent(uint32_t key, Node *cursor, Node *newLeafNode)
             cursor->parentPtr = root;
             newInternalNode->parentPtr = root;
 
-            numNodes += 2;
+            numNodes++;
             levels ++;
         } else {
             // parent is internal,
