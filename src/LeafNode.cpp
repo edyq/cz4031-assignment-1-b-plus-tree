@@ -93,7 +93,7 @@ int LeafNode::getSize()
     return this->keys.size();
 }
 
-void LeafNode::insertRec(uint32_t key, shared_ptr<Block> blockAddress)
+void LeafNode::insertRec(uint32_t key, <vector<shared_ptr<Block>> blockAddress)
 {
     for (int i = 0; i < this->size; i++)
     {
@@ -111,7 +111,7 @@ void LeafNode::insertRec(uint32_t key, shared_ptr<Block> blockAddress)
     return;
 }
 
-LeafNode *LeafNode::split(uint32_t key, shared_ptr<Block> b)
+LeafNode *LeafNode::split(uint32_t key, <vector<shared_ptr<Block>> b)
 {
     this->insertRec(key, b);
     LeafNode *newLeaf = new LeafNode(this->numKeys);
