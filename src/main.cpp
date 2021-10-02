@@ -112,9 +112,13 @@ void run_exp_4(Storage& storage, BPTree& indexTree) {
 
 void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& indexTree) {
     std::set<std::shared_ptr<Block>> used_blocks;
+    std::cout << "inseting" << std::endl;
+    size_t i = 0;
     for (auto& entry: entries) {
         auto block_ptr = storage.insertEntry(entry);
+        std::cout << "ready to insert " << i << std::endl;
         indexTree.insert(entry.numVotes, block_ptr);
+        std::cout << "done insert " << i++ << std::endl;
         used_blocks.insert(block_ptr);
     }
     std::cout << "=========================" << std::endl;
@@ -174,8 +178,8 @@ int main(int argc, char* argv[]) {
     auto entries = LoadEntryFromFileOrDie();
 
 
-     run experiments
-     TODO: this section was not tested as bp hasn't been finished yet
+    //  run experiments
+    //  TODO: this section was not tested as bp hasn't been finished yet
     run_experiments(storage, entries, bpIndexTree);
 
 

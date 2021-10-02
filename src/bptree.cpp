@@ -4,7 +4,7 @@
 #include "iostream"
 #include <vector>
 #include <memory>
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 
 #include <math.h>
