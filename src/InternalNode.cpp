@@ -24,7 +24,7 @@ InternalNode::~InternalNode()
 {
 }
 
-Node *InternalNode::getNode(float key)
+Node *InternalNode::getNode(uint32_t key)
 {
     if (key < this->keys[0])
     {
@@ -45,12 +45,12 @@ int InternalNode::getSize()
     return this->keys.size();
 }
 
-float InternalNode::getFirstKey()
+uint32_t InternalNode::getFirstKey()
 {
     return this->childNodes[0]->getFirstKey();
 }
 
-InternalNode *InternalNode::split(float key, Node *node)
+InternalNode *InternalNode::split(uint32_t key, Node *node)
 {
     // cout << "spliting internal node" << endl;
     this->insertChild(key, node);
@@ -60,7 +60,7 @@ InternalNode *InternalNode::split(float key, Node *node)
     newNode->initializeNode(this->keys[(numKeys + 1) / 2 + 1], this->childNodes[(numKeys + 1) / 2 + 1], this->childNodes[(numKeys + 1) / 2 + 2]);
     for (int i = 0; i < (numKeys) / 2 + 1; i++)
     {
-        float newKey = *(keys.begin() + (numKeys + 1) / 2);
+        uint32_t newKey = *(keys.begin() + (numKeys + 1) / 2);
         Node *newChild = *(childNodes.begin() + (numKeys + 1) / 2 + 1);
         keys.erase(keys.begin() + (numKeys + 1) / 2);
         childNodes.erase(childNodes.begin() + (numKeys + 1) / 2 + 1);
@@ -74,7 +74,7 @@ InternalNode *InternalNode::split(float key, Node *node)
     return newNode;
 }
 
-void InternalNode::insertChild(float key, Node *childNode)
+void InternalNode::insertChild(uint32_t key, Node *childNode)
 {
     // printf("inserting child node with first key %.1f into node\n", key);
     for (int i = 0; i < this->size; i++)
@@ -93,7 +93,7 @@ void InternalNode::insertChild(float key, Node *childNode)
     return;
 }
 
-void InternalNode::initializeNode(float firstKey, Node *first, Node *second)
+void InternalNode::initializeNode(uint32_t firstKey, Node *first, Node *second)
 {
     this->keys.push_back(firstKey);
     this->childNodes.push_back(first);
@@ -117,16 +117,16 @@ void InternalNode::moveFirstToEndOf(InternalNode *recipientNode)
     recipientNode->childNodes.push_back(child);
 }
 
-void InternalNode::setKey(int index, float key)
+void InternalNode::setKey(int index, uint32_t key)
 {
     this->keys.at(index) = key;
 }
 
 void InternalNode::moveLastToFrontOf(InternalNode *recipientNode, int orderOfThisChildNode)
 {
-    float keyToParent = this->keys.back();
+    uint32_t keyToParent = this->keys.back();
     InternalNode *parentNode = static_cast<InternalNode *>(this->getParent());
-    float keyToRecipient = parentNode->getKey(orderOfThisChildNode - 1);
+    uint32_t keyToRecipient = parentNode->getKey(orderOfThisChildNode - 1);
     this->keys.erase(this->keys.end());
     parentNode->setKey(orderOfThisChildNode - 1, keyToParent);
     recipientNode->keys.insert(keys.begin(), keyToRecipient);
@@ -213,7 +213,7 @@ void InternalNode::joinTwoNodes(InternalNode* recipientNode, int nodeToDelete_in
     this->clearKeysAndNodes();
 }
 
-vector<float> InternalNode::getAllkeys()
+vector<uint32_t> InternalNode::getAllkeys()
 {
     return this->keys;
 }
@@ -233,15 +233,15 @@ bool InternalNode::isRoot()
     return !(this->getParent());
 }
 
-void InternalNode::appendKeys(vector<float> newKeys)
+void InternalNode::appendKeys(vector<uint32_t> newKeys)
 {
-    for(float newKey : newKeys)
+    for(uint32_t newKey : newKeys)
     {   
         this->keys.push_back(newKey);
     }
 }
 
-void InternalNode::appendKeyAt(float key, int index)
+void InternalNode::appendKeyAt(uint32_t key, int index)
 {
     if(this->keys.size()>=this->numKeys)
     {
@@ -249,7 +249,7 @@ void InternalNode::appendKeyAt(float key, int index)
     }
 }
 
-float InternalNode::getKey(int index)
+uint32_t InternalNode::getKey(int index)
 {
     return this->keys.at(index);
 }
@@ -259,7 +259,7 @@ vector<Node *> InternalNode::getAllChildNodes()
     return this->childNodes;
 }
 
-void InternalNode::insertKeyAtLast(float key)
+void InternalNode::insertKeyAtLast(uint32_t key)
 {
     this->keys.push_back(key);
 }

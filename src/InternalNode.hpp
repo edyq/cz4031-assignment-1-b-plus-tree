@@ -16,29 +16,29 @@ public:
     // get the current size of internal node
     int getSize();
     bool isRoot() ;
-    float getFirstKey() override;
+    uint32_t getFirstKey() override;
     // helper function for insertion
-    Node *getNode(float key);
-    InternalNode *split(float key, Node *node);
-    void insertChild(float key, Node *childNode);
-    void initializeNode(float firstKey, Node *first, Node *second);
+    Node *getNode(uint32_t key);
+    InternalNode *split(uint32_t key, Node *node);
+    void insertChild(uint32_t key, Node *childNode);
+    void initializeNode(uint32_t firstKey, Node *first, Node *second);
     void moveFirstToEndOf(InternalNode* recipientNode);
     void moveLastToFrontOf(InternalNode* recipient, int orderOfThisChildNode);
-    void setKey(int index, float key);
+    void setKey(int index, uint32_t key);
     Node* getChildNode(int index);
     int getChildIndex(Node *aNode) const;
     void queueUpChildren(std::queue<Node*>* argQueue);
     Node* firstChild() const;
     std::string toString() const;
     void joinTwoNodes(InternalNode* recipientNode, int nodeToDelete_index,InternalNode* parent);
-    vector<float> getAllkeys();
+    vector<uint32_t> getAllkeys();
     void removeKey(int index);
     void removeChildNode(int index);
-    void appendKeys(vector<float>);
-    void appendKeyAt(float key, int index);
-    float getKey(int index);
+    void appendKeys(vector<uint32_t>);
+    void appendKeyAt(uint32_t key, int index);
+    uint32_t getKey(int index);
     vector<Node *> getAllChildNodes();
-    void insertKeyAtLast(float key);
+    void insertKeyAtLast(uint32_t key);
     void appendChildNodes(vector<Node *>);
 private:
     // current number of keys in the node
@@ -48,7 +48,7 @@ private:
     int numKeys;
     Node *parentNode;
     // length of order = numNodes + 1
-    vector<float> keys;
+    vector<uint32_t> keys;
     // length of childNodes = numNodes
     vector<Node *> childNodes;
 };
