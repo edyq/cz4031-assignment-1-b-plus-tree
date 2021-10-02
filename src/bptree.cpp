@@ -187,6 +187,7 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
         root->numKeys += 1;
         root->blocks[0].push_back(blockAddress);
         levels = 1;
+        numNodes++;
     } else {
         // else the tree exists, traverse the tree to find the proper place to insert the key
         Node *cursor = root;        // start from the root
@@ -254,7 +255,11 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
                 cursor->blocks = vector<vector<shared_ptr<Block>>>(tempBlockVector.begin(), tempBlockVector.begin() + cursor->numKeys);
                 newLeafNode->blocks = vector<vector<shared_ptr<Block>>>(tempBlockVector.begin() + cursor->numKeys, tempBlockVector.end());
 
-                cursor->nextNode = newLeafNode;
+                if (cursor->nextNode != nullptr) {
+                    cursor->nextNode->preNode = newLeafNode;
+                }
+                newLeafNode->nextNode = cursor->nextNode;
+                cursor->nextNode= newLeafNode;
                 newLeafNode->preNode = cursor;
 
                 numNodes ++;
@@ -295,7 +300,7 @@ void BPTree::updateInternalParent(uint32_t key, Node *cursor, Node *newLeafNode)
         cursor->keys.insert(cursor->keys.begin() + i, key);
 
         // update pointers
-        cursor->pointers.insert(cursor->pointers.begin() + i, newLeafNode);
+        cursor->pointers.insert(cursor->pointers.begin() + i + 1, newLeafNode);
 
         // update numKeys
         cursor->numKeys += 1;
