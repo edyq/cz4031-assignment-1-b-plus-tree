@@ -9,7 +9,7 @@ public:
     Node(int numNodes);
     virtual ~Node();
     virtual bool isLeafNode() const = 0;
-    virtual float getFirstKey() = 0;
+    virtual uint32_t getFirstKey() = 0;
     virtual int getSize() = 0;
     // virtual bool isRoot() const = 0;
     Node* getParent();
