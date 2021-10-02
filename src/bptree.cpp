@@ -308,3 +308,7 @@ void BPTree::updateInternalParent(uint32_t key, Node *cursor, Node *newLeafNode)
         }
     }
 }
+
+vector<SearchResult> BPTree::search(uint32_t lbKey, uint32_t ubKey) {
+	return vector<SearchResult>();
+}

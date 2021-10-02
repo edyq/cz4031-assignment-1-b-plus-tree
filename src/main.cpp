@@ -34,6 +34,11 @@ std::vector<Entry> LoadEntryFromFileOrDie(
     return contents;
 }
 
+void run_exp_3(BPTree& indexTree) {
+	auto result = indexTree.search(500, 500);
+	result.
+}
+
 void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& indexTree) {
     std::set<std::shared_ptr<Block>> used_blocks;
     for (auto& entry: entries) {
@@ -65,9 +70,6 @@ void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& inde
 		- the average of “averageRating’s” of the records that are returned
      */
 
-    //    vector<shared_ptr<??>>
-    //    vector<shared_ptr<Block>>
-    //    indexTree.search()
 
     // Experiment 4
     std::cout << "=========================" << std::endl;
