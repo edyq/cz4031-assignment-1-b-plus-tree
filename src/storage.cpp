@@ -78,10 +78,13 @@ std::vector<Entry> Storage::query(std::shared_ptr<Block> block, uint32_t lowerBo
 }
 
 void Storage::print(std::shared_ptr<Block> block) {
-	auto start = block->getPtr(), end = block->getWritePtr();
-	for (auto ptr = start; ptr < end; advanceToNextEntry(ptr)) {
-		Entry entry = charsToEntry(ptr);
-		std::cout << entry.tconst << "|";
-	}
-	std::cout << std::endl;
+    auto start = block->getPtr(), end = block->getWritePtr();
+    for (auto ptr = start; ptr < end; advanceToNextEntry(ptr)) {
+        Entry entry = charsToEntry(ptr);
+        for (int i = 0; i < Entry::tconstSize; ++i) {
+            std::cout << entry.tconst[i];
+        }
+        std::cout << " | ";
+    }
+    std::cout << std::endl;
 }
