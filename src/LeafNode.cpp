@@ -48,7 +48,7 @@ LeafNode::~LeafNode()
 }
 
 //RecordPointer *LeafNode::getRecPointer(float key)
-<vector<shared_ptr<Block>> *LeafNode::getBlocks(float key)
+<vector<shared_ptr<Block>> *LeafNode::getBlock(float key)
 {
     for (int i = 0; i < size; i++)
     {
