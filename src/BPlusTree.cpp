@@ -13,7 +13,7 @@ BPlusTree::BPlusTree(int numKeys)
     this->rootNode = new LeafNode(numKeys);
 }
 
-void BPlusTree::insert(uint32_t key, vector<shared_ptr<Block>> b)
+void BPlusTree::insert(uint32_t key, shared_ptr<Block> b)
 {
     // printf("inserting record with key %.1f into leaf node\n", key);
     auto leaf = findLeafNode(key);
@@ -21,7 +21,7 @@ void BPlusTree::insert(uint32_t key, vector<shared_ptr<Block>> b)
     auto block = leaf->getBlock(key);
     if (block)
     {
-//    	block->push_back(b);  // TODO: error: no matching member function for call to 'push_back'
+    	block->push_back(b);  // TODO: error: no matching member function for call to 'push_back'
     }
     else
     {

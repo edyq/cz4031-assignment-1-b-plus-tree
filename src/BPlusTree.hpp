@@ -14,7 +14,7 @@ class BPlusTree
 {
 public:
     BPlusTree(int numKeys);
-    void insert(uint32_t key, vector<shared_ptr<Block>> b);
+    void insert(uint32_t key, shared_ptr<Block> b);
     void remove(uint32_t key);
     vector<shared_ptr<Block>> searchRecord(uint32_t startKey, uint32_t endKey);
 

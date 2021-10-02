@@ -18,9 +18,9 @@ public:
     uint32_t getFirstKey() override;
     bool isRoot();
     // helper function for insertion
-    void insertRec(uint32_t key, vector<shared_ptr<Block>> blockAddress);
+    void insertRec(uint32_t key, shared_ptr<Block> blockAddress);
 //    void insertRec(uint32_t key, RecordPointer p);
-    LeafNode *split(uint32_t key, vector<shared_ptr<Block>> b);
+    LeafNode *split(uint32_t key, shared_ptr<Block> b);
 //    LeafNode *split(uint32_t key, RecordPointer p);
     void setNextNode(LeafNode *nextNode);
     LeafNode *getNextNode();

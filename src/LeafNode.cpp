@@ -38,10 +38,10 @@ vector<shared_ptr<Block>> *LeafNode::getBlock(uint32_t key)
     {
         if (this->keys[i] == key)
         {
-            return &(this->blocks[i]);
+        	return &(this->blocks[i]);
         }
     }
-    return {};
+    return nullptr;
 }
 
 int LeafNode::getSize()
@@ -49,7 +49,7 @@ int LeafNode::getSize()
     return this->keys.size();
 }
 
-void LeafNode::insertRec(uint32_t key, vector<shared_ptr<Block>> blockAddress)
+void LeafNode::insertRec(uint32_t key, shared_ptr<Block> blockAddress)
 {
     for (int i = 0; i < this->size; i++)
     {
@@ -67,14 +67,14 @@ void LeafNode::insertRec(uint32_t key, vector<shared_ptr<Block>> blockAddress)
     return;
 }
 
-LeafNode *LeafNode::split(uint32_t key, vector<shared_ptr<Block>> b)
+LeafNode *LeafNode::split(uint32_t key, shared_ptr<Block> b)
 {
     this->insertRec(key, b);
     LeafNode *newLeaf = new LeafNode(this->numKeys);
     for (int i = 0; i < (numKeys + 1) / 2; i++)
     {
         uint32_t newKey = *(keys.begin() + numKeys / 2 + 1);
-        auto newBlk = *(blocks.begin() + numKeys / 2 + 1);
+        auto newBlk = *(blocks.begin() + numKeys / 2 + 1);  // TODO: verify, newBlk is a vector
         keys.erase(keys.begin() + numKeys / 2 + 1);
         blocks.erase(blocks.begin() + numKeys / 2 + 1);
         newLeaf->insertRec(newKey, newBlk);  // TODO: verify
