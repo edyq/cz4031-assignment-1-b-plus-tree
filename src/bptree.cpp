@@ -3,8 +3,8 @@
 #include "iostream"
 #include <vector>
 #include <algorithm>
-using namespace std;
 
+using namespace std;
 
 Node::Node(int maxNumKeys, Node *parentPointer, bool isLeafNode) {
     parentPtr = parentPointer;
@@ -32,16 +32,16 @@ void BPTree::remove(uint32_t key) {
 void BPTree::removeInternal(uint32_t key) {
     Node *cur_node = root;
     vector<uint32_t> keys = cur_node->getKeys();
-    while(!cur_node->isLeafNode()){
-        for (int i=0; i<keys.size(); i++){
-            if (key < keys[i]){
+    while (!cur_node->isLeafNode()) {
+        for (int i = 0; i < keys.size(); i++) {
+            if (key < keys[i]) {
                 cur_node = cur_node->getChildNodes()[i];
             }
         }
     }
     bool found = false;
     int index;
-    for(int i=0; i<keys.size(); i++){
+    for (int i = 0; i < keys.size(); i++) {
         if (key == keys[i]) {
             vector<shared_ptr<Block>> block = cur_node->getBlocks()[i];
             found = true;
@@ -50,9 +50,9 @@ void BPTree::removeInternal(uint32_t key) {
         }
     }
 
-    if (!found){
+    if (!found) {
         return;
-    }else {
+    } else {
         // call storage to remove that key using block
         cur_node->keys.erase(cur_node->keys.begin() + index);
         cur_node->blocks.erase(cur_node->blocks.begin() + index);
@@ -135,8 +135,46 @@ void BPTree::removeInternal(uint32_t key) {
         }
     }
 
-    return ;
+    return;
 }
+
+
+SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
+    // single key search
+    SearchResult result;
+    Node *cursor = root;
+    result.accessedNodes.insert(root);
+
+    // go to leaf node
+    while (!cursor->isLeaf) {
+        for (int i = 0; i < cursor->numKeys; i++) {
+            if (lbKey < cursor->keys[i]) {
+                cursor = cursor->pointers[i];
+                result.accessedNodes.insert(cursor);
+                break;
+            }
+            if (i == cursor->numKeys - 1) {
+                cursor = cursor->pointers.back();
+                result.accessedNodes.insert(cursor);
+                break;
+            }
+        }
+    }
+
+    // search the level of leaf nodes
+    while(true) {
+        for (int i = 0; i < cursor->numKeys; i++) {
+            if (cursor->keys[i] >= lbKey && cursor->keys[i] <= ubKey) {
+                result.accessedNodes.insert(cursor);
+                for (uint32_t j = 0; j < cursor->blocks.size(); j++) {
+                    result.accessedBlocks.insert(cursor->blocks[i][j]);
+                }
+            }
+        }
+        cursor = cursor->nextNode;
+        if (cursor->keys[0] > ubKey) break;
+    }
+    return result;
 
 // insert a record into the bptree
 void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {

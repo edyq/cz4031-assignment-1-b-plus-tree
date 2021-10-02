@@ -8,6 +8,7 @@
 
 #include "block.h"
 #include <vector>
+#include <set>
 using namespace std;
 typedef int KEY_TYPE;
 
