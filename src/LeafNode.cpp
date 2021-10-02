@@ -38,7 +38,7 @@ vector<shared_ptr<Block>> *LeafNode::getBlock(uint32_t key)
     {
         if (this->keys[i] == key)
         {
-            return this->blocks[i];
+            return this->blocks[i];  // TODO: error
         }
     }
     return {};
@@ -56,18 +56,18 @@ void LeafNode::insertRec(uint32_t key, vector<shared_ptr<Block>> blockAddress)
         if (this->keys[i] > key)
         {
             this->keys.insert(keys.begin() + i, key);
-            this->blocks.insert(blockAddress.begin() + i, p);
+            this->blocks.insert(blockAddress.begin() + i, p);  // TODO: p does not exist
             this->size += 1;
             return;
         }
     }
     this->keys.insert(keys.begin() + size, key);
-    this->blocks.insert(blockAddress.begin() + size, p);
+    this->blocks.insert(blockAddress.begin() + size, p);  // TODO: p!!!
     this->size += 1;
     return;
 }
 
-LeafNode *LeafNode::split(uint32_t key, <vector<shared_ptr<Block>> b)
+LeafNode *LeafNode::split(uint32_t key, vector<shared_ptr<Block>> b)
 {
     this->insertRec(key, b);
     LeafNode *newLeaf = new LeafNode(this->numKeys);
@@ -77,7 +77,7 @@ LeafNode *LeafNode::split(uint32_t key, <vector<shared_ptr<Block>> b)
         shared_ptr<Block> newBlk = *(blocks.begin() + numKeys / 2 + 1);
         keys.erase(keys.begin() + numKeys / 2 + 1);
         blocks.erase(blocks.begin() + numKeys / 2 + 1);
-        newLeaf->insertRec(newKey, newRec);
+        newLeaf->insertRec(newKey, newRec);  // TODO: where is newRec?
     }
     this->size = numKeys / 2 + 1;
     return newLeaf;
@@ -147,8 +147,8 @@ void LeafNode::moveLastToFrontOf(LeafNode *recipientNode, int orderOfThisChildNo
     parentNode->setKey(0, keyToParent);
     recipientNode->keys.insert(keys.begin(), keyToRecipient);
 
-    printf("this->recPointer size = %d\n",&(this->recPointer.at(0)));
-    shared_ptr<Block> child = this->blocks.back();
+    printf("this->recPointer size = %d\n",&(this->recPointer.at(0)));  // TODO: error
+    shared_ptr<Block> child = this->blocks.back();  // TODO: error
 
     this->blocks.erase(this->blocks.end());
     recipientNode->blocks.insert(blocks.begin(), child);
