@@ -18,20 +18,20 @@ public:
     ~LeafNode() override;
     bool isLeafNode() const override;
     int getSize();
-    float getFirstKey() override;
+    uint32_t getFirstKey() override;
     bool isRoot();
     // helper function for insertion
-    void insertRec(float key, shared_ptr<Block> blockAddress);
-//    void insertRec(float key, RecordPointer p);
-    LeafNode *split(float key, shared_ptr<Block> b);
-//    LeafNode *split(float key, RecordPointer p);
+    void insertRec(uint32_t key, shared_ptr<Block> blockAddress);
+//    void insertRec(uint32_t key, RecordPointer p);
+    LeafNode *split(uint32_t key, shared_ptr<Block> b);
+//    LeafNode *split(uint32_t key, RecordPointer p);
     void setNextNode(LeafNode *nextNode);
-//    void copySingle(float startKey, float endKey, vector<Record> &aVector);
-//    void copyStart(float aKey, vector<Record> &aVector);
-//    void copyEnd(float aKey, vector<Record> &aVector);
+//    void copySingle(uint32_t startKey, uint32_t endKey, vector<Record> &aVector);
+//    void copyStart(uint32_t aKey, vector<Record> &aVector);
+//    void copyEnd(uint32_t aKey, vector<Record> &aVector);
 //    void copyRange(vector<Record> &aVector);
     LeafNode *getNextNode();
-    void removeRec(float key);
+    void removeRec(uint32_t key);
     int getMinNumKeys();
     void moveFirstToEndOf(LeafNode *recipientNode);
     void moveLastToFrontOf(LeafNode *recipient, int orderOfThisChildNode);
@@ -39,19 +39,19 @@ public:
     void joinTwoNodes(LeafNode *recipientNode, int nodeToDelete_index, InternalNode *parent);
     void appendChildNodes(vector<shared_ptr<Block>> blocks);
 //    void appendChildNodes(vector<RecordPointer> records);
-    vector<float> getAllkeys();
+    vector<uint32_t> getAllkeys();
     void removeKey(int index);
     void removeChildNode(int index);
-    void appendKeys(vector<float>);
-    void appendKeyAt(float key, int index);
-//    void printCurrentBlock(float key, RecordPointer* rp);
-    float getKey(int index);
-//    RecordPointer *getRecPointer(float key);
-    <vector<shared_ptr<Block>> *getBlock(float key);
-    Record *getRec(float key);
+    void appendKeys(vector<uint32_t>);
+    void appendKeyAt(uint32_t key, int index);
+//    void printCurrentBlock(uint32_t key, RecordPointer* rp);
+    uint32_t getKey(int index);
+//    RecordPointer *getRecPointer(uint32_t key);
+    <vector<shared_ptr<Block>> *getBlock(uint32_t key);
+//    Record *getRec(uint32_t key);
 //    vector<RecordPointer> getAllRecPtrs();
 //    vector<Record *> getAllRecs();
-//    void chainRec(float key, RecordPointer p);
+//    void chainRec(uint32_t key, RecordPointer p);
     
 private:
     // maximum number of Keys in a block
@@ -63,7 +63,7 @@ private:
     int size;
     Node *parentNode;
     // length of order = numNodes + 1
-    vector<float> keys;
+    vector<uint32_t> keys;
     // length of childNodes = numNodes
     vector<Record *> childNodes; //No longer fits the requirement later change to below
 //    vector<RecordPointer> recPointer;

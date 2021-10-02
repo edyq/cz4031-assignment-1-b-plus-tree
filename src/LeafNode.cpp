@@ -47,8 +47,8 @@ LeafNode::~LeafNode()
 {
 }
 
-//RecordPointer *LeafNode::getRecPointer(float key)
-<vector<shared_ptr<Block>> *LeafNode::getBlock(float key)
+//RecordPointer *LeafNode::getRecPointer(uint32_t key)
+<vector<shared_ptr<Block>> *LeafNode::getBlock(uint32_t key)
 {
     for (int i = 0; i < size; i++)
     {
@@ -60,7 +60,7 @@ LeafNode::~LeafNode()
     return NULL;
 }
 
-//Record *LeafNode::getRec(float key)
+//Record *LeafNode::getRec(uint32_t key)
 //{
 //    RecordPointer *recPtr;
 //    recPtr = this->getRecPointer(key);
@@ -75,7 +75,7 @@ LeafNode::~LeafNode()
 //    // return this->getRecPointer(key)->getBlock()->getRecords()[this->getRecPointer(key)->getOffset()];
 //}
 //
-//void LeafNode::chainRec(float key, RecordPointer p)
+//void LeafNode::chainRec(uint32_t key, RecordPointer p)
 //{
 //    for (int i = 0; i < size; i++)
 //    {
@@ -93,7 +93,7 @@ int LeafNode::getSize()
     return this->keys.size();
 }
 
-void LeafNode::insertRec(float key, shared_ptr<Block> blockAddress)
+void LeafNode::insertRec(uint32_t key, shared_ptr<Block> blockAddress)
 {
     for (int i = 0; i < this->size; i++)
     {
@@ -111,13 +111,13 @@ void LeafNode::insertRec(float key, shared_ptr<Block> blockAddress)
     return;
 }
 
-LeafNode *LeafNode::split(float key, shared_ptr<Block> b)
+LeafNode *LeafNode::split(uint32_t key, shared_ptr<Block> b)
 {
     this->insertRec(key, b);
     LeafNode *newLeaf = new LeafNode(this->numKeys);
     for (int i = 0; i < (numKeys + 1) / 2; i++)
     {
-        float newKey = *(keys.begin() + numKeys / 2 + 1);
+        uint32_t newKey = *(keys.begin() + numKeys / 2 + 1);
         shared_ptr<Block> newBlk = *(blocks.begin() + numKeys / 2 + 1);
         keys.erase(keys.begin() + numKeys / 2 + 1);
         blocks.erase(blocks.begin() + numKeys / 2 + 1);
@@ -136,7 +136,7 @@ LeafNode *LeafNode::getNextNode()
     return this->nextNode;
 }
 
-float LeafNode::getFirstKey()
+uint32_t LeafNode::getFirstKey()
 {
     if (this->keys.empty())
     {
@@ -145,7 +145,7 @@ float LeafNode::getFirstKey()
     return this->keys[0];
 }
 
-void LeafNode::removeRec(float key)
+void LeafNode::removeRec(uint32_t key)
 {
     int curr_pos = 0;
     int end_pos = keys.size();
@@ -169,9 +169,9 @@ int LeafNode::getMinNumKeys()
 
 void LeafNode::moveFirstToEndOf(LeafNode *recipientNode)
 {
-    float keyToRecipient = this->keys.at(0);
+    uint32_t keyToRecipient = this->keys.at(0);
     this->keys.erase(this->keys.begin());
-    float keyToParent = this->keys.at(0);
+    uint32_t keyToParent = this->keys.at(0);
     InternalNode *parentNode = static_cast<InternalNode *>(this->getParent());
     parentNode->setKey(0, keyToParent);
     recipientNode->keys.push_back(keyToRecipient);
@@ -183,8 +183,8 @@ void LeafNode::moveFirstToEndOf(LeafNode *recipientNode)
 
 void LeafNode::moveLastToFrontOf(LeafNode *recipientNode, int orderOfThisChildNode)
 {
-    float keyToParent = this->keys.back();
-    float keyToRecipient = keyToParent;
+    uint32_t keyToParent = this->keys.back();
+    uint32_t keyToRecipient = keyToParent;
     InternalNode *parentNode = static_cast<InternalNode *>(this->getParent());
     this->keys.erase(this->keys.end());
     parentNode->setKey(0, keyToParent);
@@ -197,7 +197,7 @@ void LeafNode::moveLastToFrontOf(LeafNode *recipientNode, int orderOfThisChildNo
     recipientNode->blocks.insert(blocks.begin(), child);
 }
 
-//void LeafNode::copySingle(float startKey, float endKey, vector<Record> &aVector)
+//void LeafNode::copySingle(uint32_t startKey, uint32_t endKey, vector<Record> &aVector)
 //{
 //    bool found = false;
 //    //cout << this->keys.size() << endl;
@@ -227,14 +227,14 @@ void LeafNode::moveLastToFrontOf(LeafNode *recipientNode, int orderOfThisChildNo
 //    }
 //}
 
-//void LeafNode::printCurrentBlock(float key, RecordPointer* rp){
+//void LeafNode::printCurrentBlock(uint32_t key, RecordPointer* rp){
 //    Block* tempB = disk->getBlock(rp->getBlockAddress());
 //    for(auto r : tempB->getRecords()){
 //        cout << "Block details: " << r->toString() << endl;
 //    }
 //}
 
-//void LeafNode::copyStart(float startKey, vector<Record> &aVector)
+//void LeafNode::copyStart(uint32_t startKey, vector<Record> &aVector)
 //{
 //    bool found = false;
 //    //cout << this->keys.size() << endl;
@@ -262,7 +262,7 @@ void LeafNode::moveLastToFrontOf(LeafNode *recipientNode, int orderOfThisChildNo
 //    }
 //}
 //
-//void LeafNode::copyEnd(float endKey, vector<Record> &aVector)
+//void LeafNode::copyEnd(uint32_t endKey, vector<Record> &aVector)
 //{
 //    bool found = false;
 //    for (auto key : this->keys)
@@ -363,7 +363,7 @@ void LeafNode::appendChildNodes(vector<shared_ptr<Block>> blocks)
     }
 }
 
-vector<float> LeafNode::getAllkeys()
+vector<uint32_t> LeafNode::getAllkeys()
 {
     return this->keys;
 }
@@ -379,15 +379,15 @@ void LeafNode::removeChildNode(int index)
     this->blocks.erase(this->blocks.begin() + index);
 }
 
-void LeafNode::appendKeys(vector<float> newKeys)
+void LeafNode::appendKeys(vector<uint32_t> newKeys)
 {
-    for (float newKey : newKeys)
+    for (uint32_t newKey : newKeys)
     {
         this->keys.push_back(newKey);
     }
 }
 
-void LeafNode::appendKeyAt(float key, int index)
+void LeafNode::appendKeyAt(uint32_t key, int index)
 {
     if (this->keys.size() >= this->numKeys)
     {
@@ -395,7 +395,7 @@ void LeafNode::appendKeyAt(float key, int index)
     }
 }
 
-float LeafNode::getKey(int index)
+uint32_t LeafNode::getKey(int index)
 {
     return this->keys.at(index);
 }
