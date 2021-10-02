@@ -13,6 +13,7 @@ typedef int KEY_TYPE;
 
 class Node {
 private:
+
     Node *parentPtr;            // Pointer to an array of keys in this node; check float/double
     vector<uint32_t> keys;
     int numKeys;                // Current number of keys in this node;
@@ -43,8 +44,39 @@ public:
     }
 
     Node *getNextNode() {
-        return nextNode;
+        if (isLeaf){
+            return nextNode;
+        }else{
+            Node *parent = parentPtr;
+            for (int i=0; i<parentPtr->pointers.size();i++){
+                if (parentPtr->pointers[i] == this){
+                    if (i == parentPtr->pointers.size()-1){
+                        return nullptr;
+                    }else{
+                        return parentPtr->pointers[i+1];
+                    }
+                }
+            }
+        }
+
     }
+    Node *getPreNode() {
+        if (isLeaf){
+            return preNode;
+        }else{
+            Node *parent = parentPtr;
+            for (int i=0; i<parentPtr->pointers.size();i++){
+                if (parentPtr->pointers[i] == this){
+                    if (i == 0){
+                        return nullptr;
+                    }else{
+                        return parentPtr->pointers[i-1];
+                    }
+                }
+            }
+        }
+    }
+
     Node *getParentPtr() {
         return parentPtr;
     }
