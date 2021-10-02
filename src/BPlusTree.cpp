@@ -4,6 +4,7 @@
 #include "BPlusTree.hpp"
 #include <iostream>
 #include <queue>
+#include "block.h"
 using namespace std;
 
 BPlusTree::BPlusTree(Disk *disk, int numKeys)
@@ -97,14 +98,14 @@ LeafNode *BPlusTree::findLeafNode(float key)
     return static_cast<LeafNode *>(node);
 }
 
-vector<Record> BPlusTree::searchRecord(float startKey, float endKey)
+vector<Block *> BPlusTree::searchRecord(float startKey, float endKey)
 {
     printf("Start searching records...\n");
     auto startLeaf = findLeafNode(startKey);
     printf("Found start leaf\n");
     auto endLeaf = findLeafNode(endKey);
     printf("Found end leaf\n");
-    vector<Record> results;
+    vector<Block *> results;
     if (!startLeaf || !endLeaf)
     {
         /* To Print None */
