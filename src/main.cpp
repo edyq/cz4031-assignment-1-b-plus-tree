@@ -34,27 +34,27 @@ std::vector<Entry> LoadEntryFromFileOrDie(
     return contents;
 }
 
-//void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& indexTree) {
-//    std::set<std::shared_ptr<Block>> used_blocks;
-//    for (auto& entry: entries) {
-//        auto block_ptr = storage.insertEntry(entry);
-//        indexTree.insert(entry.numVotes, block_ptr);
-//        used_blocks.insert(block_ptr);
-//    }
-//    std::cout << "=========================" << std::endl;
-//    std::cout << " Experiment 1:" << std::endl;
-//    std::cout << "the number of blocks: " << used_blocks.size();
-//    std::cout << "the size of database (in terms of MB)" << bytesToMb(entries.size() * Entry::size);
-//
-//    std::cout << "=========================" << std::endl;
-//    std::cout << " Experiment 2:" << std::endl;
-//    std::cout << "parameter n of the B+ tree" << indexTree.getMaxKeys();
-//    std::cout << "the number of nodes of the B+ tree" << indexTree.getNumNodes();
-//    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree" << indexTree.getLevels();
-//    auto rootNode = indexTree.getRoot();
-//    std::cout << "the content of the root node: ";
-//    printVector<uint32_t>(rootNode->getKeys());
-//}
+void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& indexTree) {
+    std::set<std::shared_ptr<Block>> used_blocks;
+    for (auto& entry: entries) {
+        auto block_ptr = storage.insertEntry(entry);
+        indexTree.insert(entry.numVotes, block_ptr);
+        used_blocks.insert(block_ptr);
+    }
+    std::cout << "=========================" << std::endl;
+    std::cout << " Experiment 1:" << std::endl;
+    std::cout << "the number of blocks: " << used_blocks.size();
+    std::cout << "the size of database (in terms of MB)" << bytesToMb(entries.size() * Entry::size);
+
+    std::cout << "=========================" << std::endl;
+    std::cout << " Experiment 2:" << std::endl;
+    std::cout << "parameter n of the B+ tree" << indexTree.getMaxKeys();
+    std::cout << "the number of nodes of the B+ tree" << indexTree.getNumNodes();
+    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree" << indexTree.getLevels();
+    auto rootNode = indexTree.getRoot();
+    std::cout << "the content of the root node: ";
+    printVector<uint32_t>(rootNode->getKeys());
+}
 
 int main(int argc, char* argv[]) {
     assert(argc == 3 &&
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 
     // run experiments
     // TODO: this section was not tested as bp hasn't been finished yet
-    // run_experiments(storage, entries, bpIndexTree);
+    run_experiments(storage, entries, bpIndexTree);
 
 
     std::cout << "the first entry has rating: " << entries[0].getRating()

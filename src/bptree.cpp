@@ -112,45 +112,40 @@ void BPTree::removeInternal(uint32_t key) {
     return;
 }
 
-vector<SearchResult> BPTree::search(uint32_t lbKey, uint32_t ubKey) {
+SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
     // single key search
-    vector<SearchResult> result = vector<SearchResult>();
-    if (lbKey == ubKey) {
-        result.push_back(searchKey(lbKey));
-    } else {
-        // range-based search
-        for (uint32_t key = lbKey; key <= ubKey; key++) {
-            result.push_back(searchKey(key));
-        }
-    }
-    return result;
-}
-
-SearchResult BPTree::searchKey(uint32_t key) {
+    SearchResult result;
     Node *cursor = root;
-    SearchResult result = SearchResult();
-    result.accessedNodes.push_back(root);
-    // search to leaf node containing the key
+    result.accessedNodes.insert(root);
+
+    // go to leaf node
     while (!cursor->isLeaf) {
         for (int i = 0; i < cursor->numKeys; i++) {
-            if (key < cursor->keys[i]) {
+            if (lbKey < cursor->keys[i]) {
                 cursor = cursor->pointers[i];
-                result.accessedNodes.push_back(cursor);
+                result.accessedNodes.insert(cursor);
                 break;
             }
             if (i == cursor->numKeys - 1) {
                 cursor = cursor->pointers.back();
-                result.accessedNodes.push_back(cursor);
+                result.accessedNodes.insert(cursor);
                 break;
             }
         }
     }
-    // search for the key at this leaf node
-    for (int i = 0; i < cursor->numKeys; i++) {
-        if (cursor->keys[i] == key) {
-            result.accessedBlocks.insert(result.accessedBlocks.end(), cursor->blocks[i].begin(),
-                                         cursor->blocks[i].end());
+
+    // search the level of leaf nodes
+    while(true) {
+        for (int i = 0; i < cursor->numKeys; i++) {
+            if (cursor->keys[i] >= lbKey && cursor->keys[i] <= ubKey) {
+                result.accessedNodes.insert(cursor);
+                for (uint32_t j = 0; j < cursor->blocks.size(); j++) {
+                    result.accessedBlocks.insert(cursor->blocks[i][j]);
+                }
+            }
         }
+        cursor = cursor->nextNode;
+        if (cursor->keys[0] > ubKey) break;
     }
     return result;
-};
+}
