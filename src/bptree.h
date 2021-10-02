@@ -49,12 +49,12 @@ public:
             return nextNode;
         }else{
             Node *parent = parentPtr;
-            for (int i=0; i<parentPtr->pointers.size();i++){
-                if (parentPtr->pointers[i] == this){
-                    if (i == parentPtr->pointers.size()-1){
+            for (int i=0; i<parent->pointers.size();i++){
+                if (parent->pointers[i] == this){
+                    if (i == parent->pointers.size()-1){
                         return nullptr;
                     }else{
-                        return parentPtr->pointers[i+1];
+                        return parent->pointers[i+1];
                     }
                 }
             }
@@ -66,12 +66,12 @@ public:
             return preNode;
         }else{
             Node *parent = parentPtr;
-            for (int i=0; i<parentPtr->pointers.size();i++){
-                if (parentPtr->pointers[i] == this){
+            for (int i=0; i<parent->pointers.size();i++){
+                if (parent->pointers[i] == this){
                     if (i == 0){
                         return nullptr;
                     }else{
-                        return parentPtr->pointers[i-1];
+                        return parent->pointers[i-1];
                     }
                 }
             }
