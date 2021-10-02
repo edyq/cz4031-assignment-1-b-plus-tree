@@ -382,8 +382,9 @@ void BPTree::updateInternalParent(uint32_t key, Node *cursor, Node *newLeafNode)
         assert(rightPtrs.size() > 0);
 
         vector<uint32_t> leftKeys;
-        auto travel = leftPtrs[0];
+        Node* travel;
         for (size_t j = 0; j < leftPtrs.size() - 1; j++) {
+            travel = leftPtrs[j + 1];
             while (!travel->isLeaf) {
                 travel = travel->pointers[0];
             }
@@ -391,8 +392,8 @@ void BPTree::updateInternalParent(uint32_t key, Node *cursor, Node *newLeafNode)
         }
 
         vector<uint32_t> rightKeys;
-        travel = rightPtrs[0];
         for (size_t j = 0; j < rightPtrs.size() - 1; j++) {
+            travel = rightPtrs[j + 1];
             while (!travel->isLeaf) {
                 travel = travel->pointers[0];
             }
