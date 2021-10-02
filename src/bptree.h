@@ -8,6 +8,7 @@
 
 #include "block.h"
 #include <vector>
+#include "types.h"
 using namespace std;
 typedef int KEY_TYPE;
 
@@ -70,7 +71,7 @@ public:
 
     ~BPTree(){};
 
-    void search(uint32_t lbKey, uint32_t ubKey);
+    vector<SearchResult> search(uint32_t lbKey, uint32_t ubKey);
 
     void insert(uint32_t key, shared_ptr<Block> blockAddress);
 
