@@ -7,12 +7,12 @@ using namespace std;
 
 Node::Node(int maxNumKeys, Node *parentPointer, bool isLeafNode) {
     parentPtr = parentPointer;
-    keys = * new vector<uint32_t>;
+    keys = vector<uint32_t>();
     numKeys = 0;
     maxKeys = maxNumKeys;
     isLeaf = isLeafNode;
-    pointers = * new vector<Node *>;
-    blocks = * new vector<vector<shared_ptr<Block>>>;
+    pointers = vector<Node *>();
+    blocks = vector<vector<shared_ptr<Block>>>();
     nextNode = nullptr;
     preNode = nullptr;
 }
@@ -48,7 +48,8 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
                 }
                 // reaching last key in the node
                 if (i == cursor->numKeys - 1) {
-                    Node *endNode = cursor->pointers[-1];
+                    // todo: change -1; pointers
+                    Node *endNode = cursor->pointers.back();
                     cursor = endNode;
                     break;
                 }
@@ -56,7 +57,7 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
         }
 
         // at leaf node now;
-        uint32_t keyIndex = uint32_t (find(cursor->keys.begin(), cursor->keys.end(), key) - cursor->keys.end());
+        uint32_t keyIndex = find(cursor->keys.begin(), cursor->keys.end(), key) - cursor->keys.begin();
         if (keyIndex < cursor->keys.size()) {
             // no new key needs to be inserted
             cursor->blocks[keyIndex].push_back(blockAddress);
@@ -66,7 +67,7 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
                 // there is place for a new key in the current node
                 // no update required for prev / next pointers
                 int i = 0;
-                while (i < cursor->numKeys and key > cursor->keys[i]) i++;
+                while (i < cursor->numKeys && key > cursor->keys[i]) i++;
 
                 cursor->keys.insert(cursor->keys.begin() + i, key);
                 cursor->numKeys += 1;
@@ -82,7 +83,7 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
                 vector<vector<shared_ptr<Block>>> tempBlockVector = cursor->blocks;
 
                 int i = 0;
-                while (i < maxKeys and key > tempKeyVector[i]) i++;
+                while (i < maxKeys && key > tempKeyVector[i]) i++;
 
                 tempKeyVector.insert(tempKeyVector.begin() + i, key);
                 vector<shared_ptr<Block>> newVector = {blockAddress};
