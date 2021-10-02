@@ -82,22 +82,22 @@ int main(int argc, char* argv[]) {
     std::cout << "the first entry has numVotes: " << entries[0].numVotes
               << std::endl;
 
-    BPTree t = BPTree(5);
-    t.insert(11);
-    t.insert(23);
-    t.insert(34);
-    t.insert(36);
-    vector<uint32_t> keys = t.getRoot()->getKeys();
-    for (int i=0; i<keys.size(); i++){
-        cout << keys[i] << " ";
-    }
-    cout << endl;
-    t.remove(11);
-    keys = t.getRoot()->getKeys();
-    for (int i=0; i<keys.size(); i++){
-        cout << keys[i] << " ";
-    }
-    cout << endl;
 
+//    BPTree t = BPTree(5);
+//    t.insert(11);
+//    t.insert(23);
+//    t.insert(34);
+//    t.insert(36);
+//    vector<uint32_t> keys = t.getRoot()->getKeys();
+//    for (int i=0; i<keys.size(); i++){
+//        cout << keys[i] << " ";
+//    }
+//    cout << endl;
+//    t.remove(11);
+//    keys = t.getRoot()->getKeys();
+//    for (int i=0; i<keys.size(); i++){
+//        cout << keys[i] << " ";
+//    }
+//    cout << endl;
     return 0;
 }

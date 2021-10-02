@@ -56,9 +56,36 @@ void BPTree::removeInternal(uint32_t key) {
         cur_node->keys.erase(cur_node->keys.begin() + index);
         cur_node->blocks.erase(cur_node->blocks.begin() + index);
         cur_node->numKeys--;
+//        for parent node deletion, we consider the case
+        while (cur_node->numKeys < cur_node->maxKeys/2) {
+            // borrow from preNode
+            if (cur_node->preNode->numKeys >= cur_node->preNode->maxKeys/2+1){
+                cur_node->keys.insert(cur_node->keys.begin(), cur_node->preNode->keys.pop_back());
+                cur_node->pointers.insert(cur_node->pointers.begin(), cur_node->preNode->pointers.pop_back());
+                cur_node->numKeys ++;
+                cur_node->preNode->numKeys --;
+                for (int i=0; i<cur_node->parentPtr->keys.size(); i++){
+                    if (cur_node->parentPtr->keys[i] == cur_node->keys[1]){
+                        cur_node->parentPtr->keys[i] = cur_node->keys[0];
+                    }
+                }
+                break;
+            }
+            if (cur_node->nextNode->numKeys >= cur_node->nextNode->maxKeys/2+1){
+                // borrow from nextNode
+                cur_node->keys.insert(cur_node->keys.begin(), cur_node->nextNode->keys.pop_back());
+                cur_node->pointers.insert(cur_node->pointers.begin(), cur_node->nextNode->pointers.pop_back());
+                cur_node->numKeys ++;
+                cur_node->nextNode->numKeys --;
+                for (int i=0; i<cur_node->parentPtr->keys.size(); i++){
+                    if (cur_node->parentPtr->keys[i] == cur_node->keys[1]){
+                        cur_node->parentPtr->keys[i] = cur_node->keys[0];
+                    }
+                }
+                break;
+            }
+            // cannot borrow, we need to do merge, and update recursively
 
-        while ((cur_node->preNode && cur_node->numKeys + cur_node->preNode->numKeys <= cur_node->maxKeys) ||
-               (cur_node->nextNode && cur_node->numKeys + cur_node->nextNode->numKeys <= cur_node->maxKeys)) {
             if (cur_node->preNode && cur_node->numKeys + cur_node->preNode->numKeys <= cur_node->maxKeys) {
                 cur_node = cur_node->preNode;
             }
