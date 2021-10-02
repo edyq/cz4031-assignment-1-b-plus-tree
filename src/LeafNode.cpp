@@ -400,30 +400,30 @@ float LeafNode::getKey(int index)
     return this->keys.at(index);
 }
 
-vector<RecordPointer> LeafNode::getAllBlocks()
-{
-    return this->blocks;
-}
-
-vector<Record *> LeafNode::getAllBlocks()
-{
-    vector<shared_ptr<Block>> allBlkPtr;
-    vector<vector<shared_ptr<Block>>> allBlocks;
-    allBlocks = this->blocks;
-
-    for (auto recPtr : allRecPtr)
-    {
-        Block *blk;
-        int offset;
-        Record *rec;
-
-        // blk = recPtr.getBlock();
-        // offset = recPtr.getOffset();
-        // rec = blk->getRecords()[offset];
-        rec = this->disk->getRecord(recPtr);
-
-        allRec.push_back(rec);
-    }
-
-    return allRec;
-}
+//vector<RecordPointer> LeafNode::getAllRecPtrs()
+//{
+//    return this->recPointer;
+//}
+//
+//vector<Record *> LeafNode::getAllRecs()
+//{
+//    vector<RecordPointer> allRecPtr;
+//    vector<Record *> allRec;
+//    allRecPtr = this->recPointer;
+//
+//    for (auto recPtr : allRecPtr)
+//    {
+//        Block *blk;
+//        int offset;
+//        Record *rec;
+//
+//        // blk = recPtr.getBlock();
+//        // offset = recPtr.getOffset();
+//        // rec = blk->getRecords()[offset];
+//        rec = this->disk->getRecord(recPtr);
+//
+//        allRec.push_back(rec);
+//    }
+//
+//    return allRec;
+//}
