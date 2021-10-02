@@ -4,24 +4,16 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
-<<<<<<< HEAD
 
-using namespace std;
-
-Node::Node(int maxNumKeys, Node *parentPointer, bool isLeafNode) {
-    parentPtr = parentPointer;
-    keys = vector<uint32_t>();
-=======
 #include <math.h>
 using namespace std;
 
 Node::Node(int maxNumKeys, Node *pPtr, bool isleaf) {
     parentPtr = pPtr;
     keys = * new vector<uint32_t>;
->>>>>>> e5f0db1... merge tested
     numKeys = 0;
     maxKeys = maxNumKeys;
-    isLeaf = isLeafNode;
+    isLeaf = isleaf;
     pointers = vector<Node *>();
     blocks = vector<vector<shared_ptr<Block>>>(1);
     nextNode = nullptr;
@@ -68,28 +60,37 @@ void BPTree::remove(uint32_t key) {
     removeInternal(key);
 }
 void BPTree::removeInternal(uint32_t key) {
+    cout << "removing " << key << endl;
     Node *cur_node = root;
     vector<uint32_t> keys = cur_node->getKeys();
     while(!cur_node->isLeafNode()){
+        bool get_node = false;
         for (int i=0; i<keys.size(); i++){
+            cout << cur_node->getChildNodes().size() << endl;
             if (key < keys[i]){
                 cur_node = cur_node->getChildNodes()[i];
-            }else{
-                cur_node = cur_node->getChildNodes()[cur_node->getChildNodes().size()];
+                cout << "get it, " << i << endl;
+                get_node = true;
             }
+        }
+        if (!get_node){
+            cur_node = cur_node->getChildNodes()[cur_node->getChildNodes().size()];
         }
     }
     bool found = false;
     int index;
     keys = cur_node->getKeys();
     for(int i=0; i<keys.size(); i++){
+        cout << keys[i] << endl;
         if (key == keys[i]) {
-            vector<shared_ptr<Block>> block = cur_node->getBlocks()[i];
+//            vector<shared_ptr<Block>> block = cur_node->getBlocks()[i];
+
             found = true;
             index = i;
             break;
         }
     }
+    cout << "found: " << found << endl;
     if (!found){
         cout << "removing not found" << endl;
         return;
