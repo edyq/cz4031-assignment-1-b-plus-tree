@@ -12,8 +12,9 @@
 struct Entry {
 	typedef uint8_t ratingType;
 	typedef uint32_t numVotesType;
-	static constexpr int tconstSize = 9;
-	static constexpr int size = 18;
+	static constexpr char tconstTerminator = '|';
+	static constexpr int tconstSize = 10;
+	static constexpr int size = 19;
 
     // tconst	averageRating	numVotes
     char tconst[tconstSize];
@@ -34,6 +35,24 @@ struct Entry {
         res += num_rat / 10;
         res += num_rat % 10 * 0.1;
         return res;
+    }
+
+    std::string getTconst() {
+        auto tmpChar = new char[tconstSize + 1]();
+        for (size_t i = 0; i < tconstSize; i++) {
+            if (tconst[i] == tconstTerminator) {
+                tmpChar[i] = '\0';
+                break;
+            } else {
+                tmpChar[i] = tconst[i];
+                if (i == (tconstSize - 1)) {
+                    tmpChar[i + 1] = '\0';
+                }
+            }
+        }
+        std::string convertedTconst(tmpChar);
+        delete tmpChar;
+        return convertedTconst;
     }
 };
 

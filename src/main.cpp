@@ -20,7 +20,13 @@ std::vector<Entry> LoadEntryFromFileOrDie(
         if (++counter <= 3) continue;  // header, not needed
         switch (counter % 3) {
             case 1:  // tconst
-                std::strcpy(current_entry.tconst, infile.c_str());
+                for (size_t i = 0; i < 10; i ++) {
+                    if (i < infile.size()) {
+                        *(current_entry.tconst + i) = infile[i];
+                    } else {
+                        *(current_entry.tconst + i) = Entry::tconstTerminator;
+                    }
+                }
                 break;
             case 2:  // averageRating
                 current_entry.rating = (infile[0] - '0') * 10 + (infile[2] - '0');
