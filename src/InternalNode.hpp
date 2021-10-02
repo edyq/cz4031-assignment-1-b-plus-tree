@@ -11,12 +11,12 @@ class InternalNode : public Node
 {
 public:
     InternalNode(int numNodes);
-    ~InternalNode() override;
-    bool isLeafNode() const override;
+    ~InternalNode();
+    bool isLeafNode() const;
     // get the current size of internal node
     int getSize();
     bool isRoot() ;
-    uint32_t getFirstKey() override;
+    uint32_t getFirstKey();
     // helper function for insertion
     Node *getNode(uint32_t key);
     InternalNode *split(uint32_t key, Node *node);

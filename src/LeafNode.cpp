@@ -56,13 +56,13 @@ void LeafNode::insertRec(uint32_t key, shared_ptr<Block> blockAddress)
         if (this->keys[i] > key)
         {
             this->keys.insert(keys.begin() + i, key);
-            this->blocks.insert(blockAddress.begin() + i, p);  // TODO: p does not exist, what are you trying to do where??? Can't understand the logic
+            this->blocks.insert(blocks.begin() + i, {blockAddress});  // TODO: p does not exist, what are you trying to do where??? Can't understand the logic
             this->size += 1;
             return;
         }
     }
     this->keys.insert(keys.begin() + size, key);
-    this->blocks.insert(blockAddress.begin() + size, p);  // TODO: p!!!
+    this->blocks.insert(blocks.begin() + size, {blockAddress});  // TODO: verify me? discuss with Maokang!!!
     this->size += 1;
     return;
 }
@@ -77,7 +77,11 @@ LeafNode *LeafNode::split(uint32_t key, shared_ptr<Block> b)
         auto newBlk = *(blocks.begin() + numKeys / 2 + 1);  // TODO: verify, newBlk is a vector
         keys.erase(keys.begin() + numKeys / 2 + 1);
         blocks.erase(blocks.begin() + numKeys / 2 + 1);
-        newLeaf->insertRec(newKey, newBlk);  // TODO: verify
+        for (auto everyBlock : newBlk) {
+        	// Need to add all blocks
+        	// TODO: verify me!
+        	newLeaf->insertRec(newKey, everyBlock);
+        }
     }
     this->size = numKeys / 2 + 1;
     return newLeaf;

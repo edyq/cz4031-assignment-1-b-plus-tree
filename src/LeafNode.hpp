@@ -12,10 +12,10 @@ class LeafNode : public Node
 {
 public:
     LeafNode(int numNodes);
-    ~LeafNode() override;
-    bool isLeafNode() const override;
-    int getSize() override;
-    uint32_t getFirstKey() override;
+    ~LeafNode();
+    bool isLeafNode() const;
+    int getSize();
+    uint32_t getFirstKey();
     bool isRoot();
     // helper function for insertion
     void insertRec(uint32_t key, shared_ptr<Block> blockAddress);
@@ -28,7 +28,7 @@ public:
     int getMinNumKeys();
     void moveFirstToEndOf(LeafNode *recipientNode);
     void moveLastToFrontOf(LeafNode *recipient, int orderOfThisChildNode);
-    std::string toString() const override;
+    std::string toString() const;
     void joinTwoNodes(LeafNode *recipientNode, int nodeToDelete_index, InternalNode *parent);
     void appendChildNodes(vector<vector<shared_ptr<Block>>> blocks);
 //    void appendChildNodes(vector<RecordPointer> records);
