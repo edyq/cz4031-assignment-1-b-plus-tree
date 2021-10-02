@@ -119,13 +119,18 @@ void BPTree::removeInternal(uint32_t key) {
             parentPtr->pointers.erase(parentPtr->pointers.begin() + cur_index+1);
             parentPtr->numKeys--;
             numNodes--;
+            if(parentPtr->pointers.size()==1){
+                parentPtr->isLeaf = cur_node->isLeaf;
+                parentPtr->pointers = cur_node->pointers;
+                parentPtr->blocks = cur_node->blocks;
+                parentPtr->keys = cur_node->keys;
+                parentPtr->numKeys = cur_node->numKeys;
+            }
+            if (root == parentPtr){
+                levels--;
+            }
 
             cur_node = cur_node->parentPtr;
-
-
-
-
-
         }
     }
 
