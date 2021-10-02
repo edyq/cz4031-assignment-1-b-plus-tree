@@ -7,11 +7,10 @@
 #include "block.h"
 using namespace std;
 
-BPlusTree::BPlusTree(Disk *disk, int numKeys)
+BPlusTree::BPlusTree(int numKeys)
 {
-    this->disk = disk;
     this->numKeys = numKeys;
-    this->rootNode = new LeafNode(disk, numKeys);
+    this->rootNode = new LeafNode(numKeys);
 }
 
 void BPlusTree::insert(uint32_t key, vector<shared_ptr<Block>> b)
@@ -118,7 +117,7 @@ vector<shared_ptr<Block>> BPlusTree::searchRecord(uint32_t startKey, uint32_t en
     	auto keys = startLeaf->getAllkeys();
     	for (auto key : keys) {
     		auto blocks = startLeaf->getBlock(key);
-    		results.insert(results.end(), blocks.begin(), blocks.end());
+    		results.insert(results.end(), blocks->begin(), blocks->end());
     	}
     	startLeaf = startLeaf->getNextNode();
     } while (startLeaf != endLeaf);
