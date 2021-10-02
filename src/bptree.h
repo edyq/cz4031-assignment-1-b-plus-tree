@@ -38,6 +38,10 @@ public:
         return blocks;
     }
 
+    vector<uint32_t> getKeys(){
+        return keys;
+    }
+
     Node *getNextNode() {
         return nextNode;
     }
@@ -73,7 +77,7 @@ public:
 
     void insert(uint32_t key, shared_ptr<Block> blockAddress);
 
-    int remove(uint32_t key);
+    void remove(uint32_t key);
 
     Node *getFirstChildNode() const;
 
