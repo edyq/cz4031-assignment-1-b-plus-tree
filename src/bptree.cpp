@@ -473,14 +473,14 @@ void BPTree::updateInternalParent(uint32_t key, Node *cursor,
                 node->parentPtr = newInternalNode;
             }
             for (auto node : cursor->pointers) {
-                node->parentPtr = newInternalNode;
+                node->parentPtr = cursor;
             }
         } else {
             for (auto node : newInternalNode->pointers) {
                 node->parentPtr = newInternalNode;
             }
             for (auto node : cursor->pointers) {
-                node->parentPtr = newInternalNode;
+                node->parentPtr = cursor;
             }
             travel = newInternalNode->pointers[0];
             while (!travel->isLeaf) {
