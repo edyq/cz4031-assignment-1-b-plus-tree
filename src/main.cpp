@@ -174,8 +174,8 @@ int main(int argc, char* argv[]) {
     auto entries = LoadEntryFromFileOrDie();
 
 
-    // run experiments
-    // TODO: this section was not tested as bp hasn't been finished yet
+     run experiments
+     TODO: this section was not tested as bp hasn't been finished yet
     run_experiments(storage, entries, bpIndexTree);
 
 
@@ -183,23 +183,42 @@ int main(int argc, char* argv[]) {
               << std::endl;
     std::cout << "the first entry has numVotes: " << entries[0].numVotes
               << std::endl;
-
-
+//
+//
+//    below the test of BPTree
 //    BPTree t = BPTree(5);
-//    t.insert(11);
-//    t.insert(23);
-//    t.insert(34);
-//    t.insert(36);
+//
 //    vector<uint32_t> keys = t.getRoot()->getKeys();
 //    for (int i=0; i<keys.size(); i++){
 //        cout << keys[i] << " ";
 //    }
 //    cout << endl;
-//    t.remove(11);
+//    vector<Node*> nodes = t.getRoot()->getChildNodes();
+//    for(int i=0; i< nodes.size(); i++){
+//        keys = nodes[i]->getKeys();
+//        for (int i=0; i<keys.size(); i++){
+//            cout << keys[i] << " ";
+//        }
+//    }
+//    cout << endl;
+//
+//    t.remove(1);
+//
+//
 //    keys = t.getRoot()->getKeys();
 //    for (int i=0; i<keys.size(); i++){
 //        cout << keys[i] << " ";
 //    }
 //    cout << endl;
+//    nodes = t.getRoot()->getChildNodes();
+//    for(int i=0; i< nodes.size(); i++){
+//        keys = nodes[i]->getKeys();
+//        for (int i=0; i<keys.size(); i++){
+//            cout << keys[i] << " ";
+//        }
+//    }
+//    cout << endl;
+
+
     return 0;
 }

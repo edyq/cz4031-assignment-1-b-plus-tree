@@ -4,12 +4,21 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+<<<<<<< HEAD
 
 using namespace std;
 
 Node::Node(int maxNumKeys, Node *parentPointer, bool isLeafNode) {
     parentPtr = parentPointer;
     keys = vector<uint32_t>();
+=======
+#include <math.h>
+using namespace std;
+
+Node::Node(int maxNumKeys, Node *pPtr, bool isleaf) {
+    parentPtr = pPtr;
+    keys = * new vector<uint32_t>;
+>>>>>>> e5f0db1... merge tested
     numKeys = 0;
     maxKeys = maxNumKeys;
     isLeaf = isLeafNode;
@@ -24,25 +33,52 @@ BPTree::BPTree(int maxNumKeys) {
     maxKeys = maxNumKeys;
     levels = 0;
     numNodes = 0;
+//    below is a mock BPTree
+//    numNodes = 7;
+//    levels = 2;
+//    root = new Node(5, nullptr, false);
+//    root->keys.push_back(6);
+//    Node *n1 = new Node(5, root, true);
+//    Node *n2 = new Node(5, root, true);
+//    root->pointers.push_back(n1);
+//    root->pointers.push_back(n2);
+//    n1->keys.push_back(1);
+//    n1->keys.push_back(2);
+//    n1->keys.push_back(3);
+//    vector<shared_ptr<Block>> *b1 = new vector<shared_ptr<Block>>;
+//    n1->blocks.push_back(*b1);
+//    n1->blocks.push_back(*b1);
+//    n1->blocks.push_back(*b1);
+//    n1->nextNode = n2;
+//    n2->keys.push_back(6);
+//    n2->keys.push_back(7);
+//    n2->keys.push_back(8);
+//    n2->blocks.push_back(*b1);
+//    n2->blocks.push_back(*b1);
+//    n2->blocks.push_back(*b1);
+
+
 }
 
 void BPTree::remove(uint32_t key) {
     removeInternal(key);
 }
-
 void BPTree::removeInternal(uint32_t key) {
     Node *cur_node = root;
     vector<uint32_t> keys = cur_node->getKeys();
-    while (!cur_node->isLeafNode()) {
-        for (int i = 0; i < keys.size(); i++) {
-            if (key < keys[i]) {
+    while(!cur_node->isLeafNode()){
+        for (int i=0; i<keys.size(); i++){
+            if (key < keys[i]){
                 cur_node = cur_node->getChildNodes()[i];
+            }else{
+                cur_node = cur_node->getChildNodes()[cur_node->getChildNodes().size()];
             }
         }
     }
     bool found = false;
     int index;
-    for (int i = 0; i < keys.size(); i++) {
+    keys = cur_node->getKeys();
+    for(int i=0; i<keys.size(); i++){
         if (key == keys[i]) {
             vector<shared_ptr<Block>> block = cur_node->getBlocks()[i];
             found = true;
@@ -50,24 +86,32 @@ void BPTree::removeInternal(uint32_t key) {
             break;
         }
     }
-
-    if (!found) {
+    if (!found){
+        cout << "removing not found" << endl;
         return;
-    } else {
+    }else {
         // call storage to remove that key using block
         cur_node->keys.erase(cur_node->keys.begin() + index);
         cur_node->blocks.erase(cur_node->blocks.begin() + index);
         cur_node->numKeys--;
+        cout << "removed" << endl;
 //        for parent node deletion, we consider the case
-        while (cur_node->numKeys < cur_node->maxKeys/2) {
-
+        while (cur_node != root && cur_node->numKeys < ceil(float(cur_node->maxKeys)/2)) {
+            cout << "try borrow from pre" << endl;
             Node *preNode = cur_node->getPreNode();
-            if (preNode->numKeys >= preNode->maxKeys/2+1){
+            if (preNode && preNode->numKeys >= ceil(float(preNode->maxKeys)/2)+1){
+                cout << "borrow from pre" << endl;
                 // borrow from preNode
                 cur_node->keys.insert(cur_node->keys.begin(), preNode->keys[preNode->keys.size()-1]);
                 preNode->keys.pop_back();
-                cur_node->pointers.insert(cur_node->pointers.begin(), preNode->pointers[preNode->pointers.size()-1]);
-                preNode->pointers.pop_back();
+                if (cur_node->isLeafNode()){
+                    cur_node->blocks.insert(cur_node->blocks.begin(), preNode->blocks[preNode->blocks.size()-1]);
+                    preNode->blocks.pop_back();
+                }else{
+                    cur_node->pointers.insert(cur_node->pointers.begin(), preNode->pointers[preNode->pointers.size()-1]);
+                    preNode->pointers.pop_back();
+                }
+
                 cur_node->numKeys ++;
                 preNode->numKeys --;
                 for (int i=0; i<cur_node->parentPtr->keys.size(); i++){
@@ -77,24 +121,31 @@ void BPTree::removeInternal(uint32_t key) {
                 }
                 break;
             }
+            cout << "try borrow from next" << endl;
             Node *nextNode = cur_node->getNextNode();
-            if (nextNode->numKeys >= nextNode->maxKeys/2+1){
+            if (nextNode && nextNode->numKeys >= ceil(float(nextNode->maxKeys)/2)+1){
                 // borrow from nextNode
-
+                cout << "borrow from next" << endl;
                 cur_node->keys.push_back(nextNode->keys[0]);
                 nextNode->keys.erase(next(nextNode->keys.begin()));
-                cur_node->pointers.push_back(nextNode->pointers[0]);
-                nextNode->pointers.erase(next(nextNode->pointers.begin()));
+                if (cur_node->isLeafNode()){
+                    cur_node->blocks.push_back(nextNode->blocks[0]);
+                    nextNode->blocks.erase(next(nextNode->blocks.begin()));
+                }else{
+                    cur_node->pointers.push_back(nextNode->pointers[0]);
+                    nextNode->pointers.erase(next(nextNode->pointers.begin()));
+                }
+
                 cur_node->numKeys ++;
                 cur_node->nextNode->numKeys --;
                 break;
             }
             // cannot borrow, we need to do merge, and update recursively
+            cout << "cannot borrow, we need to do merge, and update recursively" << endl;
 //            Node *preNode = cur_node->getPreNode();
             if (preNode && cur_node->numKeys + preNode->numKeys <= cur_node->maxKeys) {
                 cur_node = preNode;
             }
-
 //            Node *nextNode = cur_node->getNextNode();
 
             cur_node->numKeys += nextNode->numKeys;
@@ -109,7 +160,6 @@ void BPTree::removeInternal(uint32_t key) {
                      std::back_inserter(cur_node->pointers));
             }
 
-
             Node *parentPtr = cur_node->parentPtr;
             int cur_index = -1;
             for (int i=0; i<parentPtr->pointers.size(); i++){
@@ -117,7 +167,7 @@ void BPTree::removeInternal(uint32_t key) {
                     cur_index = i;
                 }
             }
-            parentPtr->keys.erase(parentPtr->keys.begin() + cur_index+1);
+            parentPtr->keys.erase(parentPtr->keys.begin() + cur_index);
             parentPtr->pointers.erase(parentPtr->pointers.begin() + cur_index+1);
             parentPtr->numKeys--;
             numNodes--;
@@ -131,12 +181,11 @@ void BPTree::removeInternal(uint32_t key) {
             if (root == parentPtr){
                 levels--;
             }
-
-            cur_node = cur_node->parentPtr;
+            cur_node = parentPtr;
         }
     }
 
-    return;
+    return ;
 }
 
 
