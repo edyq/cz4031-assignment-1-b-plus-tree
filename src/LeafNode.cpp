@@ -48,16 +48,16 @@ LeafNode::~LeafNode()
 }
 
 //RecordPointer *LeafNode::getRecPointer(uint32_t key)
-vector<shared_ptr<Block> LeafNode::getBlock(uint32_t key)
+vector<shared_ptr<Block>> *LeafNode::getBlock(uint32_t key)
 {
     for (int i = 0; i < size; i++)
     {
         if (this->keys[i] == key)
         {
-            return &(this->blocks[i]);
+            return this->blocks[i];
         }
     }
-    return;
+    return {};
 }
 
 //Record *LeafNode::getRec(uint32_t key)

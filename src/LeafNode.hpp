@@ -47,7 +47,7 @@ public:
 //    void printCurrentBlock(uint32_t key, RecordPointer* rp);
     uint32_t getKey(int index);
 //    RecordPointer *getRecPointer(uint32_t key);
-    vector<shared_ptr<Block> getBlock(uint32_t key);
+    vector<shared_ptr<Block>> *getBlock(uint32_t key);
 //    Record *getRec(uint32_t key);
 //    vector<RecordPointer> getAllRecPtrs();
 //    vector<Record *> getAllRecs();

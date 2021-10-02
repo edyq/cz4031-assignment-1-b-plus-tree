@@ -98,17 +98,18 @@ LeafNode *BPlusTree::findLeafNode(float key)
     return static_cast<LeafNode *>(node);
 }
 
-vector<Block *> BPlusTree::searchRecord(float startKey, float endKey)
+/**
+ * Modified by Maokang
+ * @param startKey
+ * @param endKey
+ * @return
+ */
+vector<shared_ptr<Block>> BPlusTree::searchRecord(uint32_t startKey, uint32_t endKey)
 {
-    printf("Start searching records...\n");
     auto startLeaf = findLeafNode(startKey);
-    printf("Found start leaf\n");
     auto endLeaf = findLeafNode(endKey);
-    printf("Found end leaf\n");
-    vector<Block *> results;
-    if (!startLeaf || !endLeaf)
-    {
-        /* To Print None */
+    vector<shared_ptr<Block>> results;
+    if (!startLeaf || !endLeaf) {
         printf("Not found startLeaf or endLeaf...\n");
         return results;
     }
@@ -116,14 +117,15 @@ vector<Block *> BPlusTree::searchRecord(float startKey, float endKey)
     do {
     	auto keys = startLeaf->getAllkeys();
     	for (auto key : keys) {
-    		auto startLeaf->getBlock(key);
+    		auto blocks = startLeaf->getBlock(key);
+    		results.insert(results.end(), blocks.begin(), blocks.end());
     	}
     	startLeaf = startLeaf->getNextNode();
     } while (startLeaf != endLeaf);
     return results;
 }
 
-void BPlusTree::insertInternal(InternalNode *parentNode, float key, Node *childNode)
+void BPlusTree::insertInternal(InternalNode *parentNode, uint32_t key, Node *childNode)
 {
     if (parentNode->getSize() == numKeys)
     {
