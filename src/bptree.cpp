@@ -240,7 +240,6 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
         for (int i = 0; i < cursor->numKeys; i++) {
             if (cursor->keys[i] >= lbKey && cursor->keys[i] <= ubKey) {
                 for (uint32_t j = 0; j < cursor->blocks[i].size(); j++) {
-                    cout << cursor->blocks[i][j] << endl;
                     result.accessedBlocks.insert(cursor->blocks[i][j]);
                 }
             }

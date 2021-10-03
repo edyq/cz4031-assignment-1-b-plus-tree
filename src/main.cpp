@@ -77,7 +77,6 @@ void printAvg(Storage& storage, set<shared_ptr<Block>>& accessedBlocks, uint32_t
 	for (auto beg = accessedBlocks.begin(); beg != accessedBlocks.end(); beg++) {
 		auto entries = storage.query(*beg, lb, ub);
 		for (auto entry : entries) {
-            cout << entry.numVotes << endl;
 			sum += entry.getRating();
 			count++;
 		}
