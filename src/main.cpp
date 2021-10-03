@@ -163,13 +163,45 @@ void run_experiments(Storage &storage, std::vector<Entry> &entries, BPTree &inde
 		- the content of the root node and its 1st child node of the updated B+ tree
      */
     // TODO: delete
-    std::cout << "number of times that a node is deleted = " << indexTree.getMaxKeys() << std::endl;
-    std::cout << "the number of nodes of the B+ tree = " << indexTree.getNumNodes() << std::endl;
-    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree = " << indexTree.getLevels()
-              << std::endl;
-    rootNode = indexTree.getRoot();
-    std::cout << "the content of the root node: " << std::endl;
-    printVector<uint32_t>(rootNode->getKeys());
+//    cout << "search: "<<indexTree.search(1000, 1000).accessedNodes.size()<< endl;
+//    cout << "blocks: "<<indexTree.search(1000, 1000).accessedBlocks.size()<< endl;
+    int pre = indexTree.getNumNodes();
+    cout << "previous num nodes "<< pre << endl;
+    indexTree.remove(1000);
+    int after = indexTree.getNumNodes();
+    cout << "the number of times that a node is deleted (or two nodes are merged) during the process of the updating the B+ tree: "<<pre-after << endl;
+    cout << "after remove, num nodes "<< after << endl;
+    cout << "levels: " << indexTree.getLevels() << endl;
+    cout <<  "root keys: " ;
+    for (int i=0; i<indexTree.getRoot()->getKeys().size(); i++){
+        cout << indexTree.getRoot()->getKeys()[i] << " ";
+    }
+    cout << endl;
+    Node *firstChild = indexTree.getRoot()->getChildNodes()[0];
+    cout <<  "first child keys: ";
+    for (int i=0; i<firstChild->getKeys().size(); i++){
+        cout << firstChild->getKeys()[i] << " ";
+    }
+    cout << endl;
+
+
+//    cout << "after num nodes "<< indexTree.getNumNodes() << endl;
+//
+//    cout << "search: "<<indexTree.search(1000, 1000).accessedNodes.size()<< endl;
+//    cout << "blocks: "<<indexTree.search(1000, 1000).accessedBlocks.size()<< endl;
+//    cout << "previous num nodes "<< indexTree.getNumNodes() << endl;
+//    indexTree.remove(499);
+//    cout << "after num nodes "<< indexTree.getNumNodes() << endl;
+
+
+
+
+//    std::cout << "number of times that a node is deleted = " << indexTree.getMaxKeys() << std::endl;
+//    std::cout << "the number of nodes of the B+ tree = " << indexTree.getNumNodes() << std::endl;
+//    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree = " << indexTree.getLevels() << std::endl;
+//    rootNode = indexTree.getRoot();
+//    std::cout << "the content of the root node: " << std::endl;
+//    printVector<uint32_t>(rootNode->getKeys());
 }
 
 int main(int argc, char *argv[]) {

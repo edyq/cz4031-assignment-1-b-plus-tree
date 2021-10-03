@@ -67,23 +67,27 @@ void BPTree::removeInternal(uint32_t key) {
     while (!cur_node->isLeafNode()) {
         bool get_node = false;
         for (int i = 0; i < keys.size(); i++) {
-            cout << cur_node->getChildNodes().size() << endl;
+//            cout << "child size: "<< cur_node->getChildNodes().size() << endl;
+//            cout << key << " " << keys[i] << endl;
             if (key < keys[i]) {
                 cur_node = cur_node->getChildNodes()[i];
-                cout << "get it, " << i << endl;
+//                cout << "get it, " << i << endl;
                 get_node = true;
+                break;
             }
         }
         if (!get_node) {
+//            cout << "pick last one" << endl;
             cur_node =
                 cur_node->getChildNodes()[cur_node->getChildNodes().size()-1];
         }
+        keys = cur_node->getKeys();
     }
     bool found = false;
     int index;
     keys = cur_node->getKeys();
     for (int i = 0; i < keys.size(); i++) {
-        cout << keys[i] << endl;
+//        cout << keys[i] << endl;
         if (key == keys[i]) {
             //            vector<shared_ptr<Block>> block =
             //            cur_node->getBlocks()[i];
@@ -103,7 +107,9 @@ void BPTree::removeInternal(uint32_t key) {
         cur_node->blocks.erase(cur_node->blocks.begin() + index);
         cur_node->numKeys--;
         cout << "removed" << endl;
+//        cout << "cur_node->numKeys: " << cur_node->numKeys << endl;
         //        for parent node deletion, we consider the case
+//        cout << "cur_node->numKeys is: " << cur_node->numKeys << endl;
         while (cur_node != root &&
                cur_node->numKeys < ceil(float(cur_node->maxKeys) / 2)) {
             cout << "try borrow from pre" << endl;
@@ -160,12 +166,19 @@ void BPTree::removeInternal(uint32_t key) {
             cout << "cannot borrow, we need to do merge, and update recursively"
                  << endl;
             //            Node *preNode = cur_node->getPreNode();
+            if (preNode && preNode->parentPtr != cur_node->parentPtr){
+                preNode = nullptr;
+            }
+
             if (preNode &&
                 cur_node->numKeys + preNode->numKeys <= cur_node->maxKeys) {
                 cur_node = preNode;
             }
             nextNode = cur_node->getNextNode();
-
+            if (nextNode->parentPtr != cur_node->parentPtr){
+                nextNode = nullptr;
+            }
+            cout << "two merge nodes: " << cur_node->numKeys << " " << nextNode->numKeys << endl;
             cur_node->numKeys += nextNode->numKeys;
             move(nextNode->keys.begin(), nextNode->keys.end(),
                  std::back_inserter(cur_node->keys));
@@ -178,19 +191,23 @@ void BPTree::removeInternal(uint32_t key) {
                 move(nextNode->pointers.begin(), nextNode->pointers.end(),
                      std::back_inserter(cur_node->pointers));
             }
-
+            cout << "merged, going to do parent modification "<< endl;
             Node *parentPtr = cur_node->parentPtr;
             int cur_index = -1;
             for (int i = 0; i < parentPtr->pointers.size(); i++) {
                 if (parentPtr->pointers[i] == cur_node) {
                     cur_index = i;
+//                    cout <<"found index: " << cur_index << endl;
+                    break;
                 }
             }
+//            cout << "keys size: " << parentPtr->keys.size() << " " << "pointer size: " << parentPtr->pointers.size() << endl;
             parentPtr->keys.erase(parentPtr->keys.begin() + cur_index);
             parentPtr->pointers.erase(parentPtr->pointers.begin() + cur_index +
                                       1);
             parentPtr->numKeys--;
             numNodes--;
+//            cout << "parent erased" << endl;
             if (parentPtr->pointers.size() == 1) {
                 parentPtr->isLeaf = cur_node->isLeaf;
                 parentPtr->pointers = cur_node->pointers;
@@ -217,6 +234,7 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
     // go to leaf node
     while (!cursor->isLeaf) {
         for (int i = 0; i < cursor->numKeys; i++) {
+
             if (lbKey < cursor->keys[i]) {
                 cursor = cursor->pointers[i];
                 result.accessedNodes.push_back(cursor);
