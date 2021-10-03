@@ -164,7 +164,7 @@ void BPTree::removeInternal(uint32_t key) {
                 cur_node->numKeys + preNode->numKeys <= cur_node->maxKeys) {
                 cur_node = preNode;
             }
-            //            Node *nextNode = cur_node->getNextNode();
+            nextNode = cur_node->getNextNode();
 
             cur_node->numKeys += nextNode->numKeys;
             move(nextNode->keys.begin(), nextNode->keys.end(),
