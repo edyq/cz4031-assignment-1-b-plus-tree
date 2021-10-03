@@ -116,8 +116,14 @@ void BPTree::removeInternal(uint32_t key) {
             ) {
             cout << "try borrow from pre" << endl;
             Node *preNode = cur_node->getPreNode();
+            int mini_for_borrow;
+            if (cur_node->isLeafNode()){
+                mini_for_borrow = floor((float(cur_node->maxKeys)+1) / 2)+1;
+            }else{
+                mini_for_borrow = floor(float(cur_node->maxKeys) / 2)+1;
+            }
             if (preNode &&
-                preNode->numKeys >= ceil(float(preNode->maxKeys) / 2) + 1) {
+                preNode->numKeys >= mini_for_borrow) {
                 cout << "borrow from pre" << endl;
                 // borrow from preNode
                 cur_node->keys.insert(cur_node->keys.begin(),
@@ -147,7 +153,7 @@ void BPTree::removeInternal(uint32_t key) {
             cout << "try borrow from next" << endl;
             Node *nextNode = cur_node->getNextNode();
             if (nextNode &&
-                nextNode->numKeys >= ceil(float(nextNode->maxKeys) / 2) + 1) {
+                nextNode->numKeys >= mini_for_borrow) {
                 // borrow from nextNode
                 cout << "borrow from next" << endl;
                 cur_node->keys.push_back(nextNode->keys[0]);
