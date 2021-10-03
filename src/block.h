@@ -7,27 +7,29 @@
 #include <iostream>
 
 class Block {
-   public:
+public:
     /**
      * @brief Construct a new Block object
      *
      * @param ptr pointer that marks the start of the block
      * @param size block size
      */
-    Block(char* ptr, size_t size) : ptr_(ptr), write_ptr_(ptr), size_(size){};
-    ~Block(){};
+    Block(char *ptr, size_t size) : ptr_(ptr), write_ptr_(ptr), size_(size) {};
+
+    ~Block() {};
 
     /**
      * @brief get block data
      *
      * @return char*
      */
-    char* getPtr() { return ptr_; }
-    char* getWritePtr() { return write_ptr_; }
+    char *getPtr() { return ptr_; }
+
+    char *getWritePtr() { return write_ptr_; }
 
     size_t getSize() { return size_; }
 
-    bool writeData(const char* buf, size_t length) {
+    bool writeData(const char *buf, size_t length) {
         if (getRemainingSpace() < length) {
             std::cout << "insufficient space inside the block! "
                       << getRemainingSpace() << " v.s. " << length << std::endl;
@@ -38,7 +40,7 @@ class Block {
         return true;
     };
 
-    bool deleteData(char* start, size_t length) {
+    bool deleteData(char *start, size_t length) {
         auto cutoff_ptr = start + length;
         if (cutoff_ptr == write_ptr_) {
             // optimal case, just trunc data
@@ -59,10 +61,11 @@ class Block {
 
     size_t getRemainingSpace() { return size_ - (write_ptr_ - ptr_); }
 
-   private:
+private:
     void resetWritePtr();
-    char* ptr_;
-    char* write_ptr_;
+
+    char *ptr_;
+    char *write_ptr_;
     size_t size_;
 };
 

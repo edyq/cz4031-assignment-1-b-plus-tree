@@ -50,7 +50,7 @@ void printIndexNodes(vector<Node *> &accessedNodes) {
     std::cout << "Number of index nodes accessed: " << numOfIndexNodes << std::endl;
     std::cout << "Contents of index nodes accessed (at most 5 are printed): " << std::endl;
     auto beg = accessedNodes.begin();
-    for (int i = 0; beg != accessedNodes.end(); i++, beg++) {
+    for (int i = 0; i < 5 && beg != accessedNodes.end(); i++, beg++) {
         std::cout << "Node " << i + 1 << ":" << endl;
         printVector<uint32_t>((*beg)->getKeys());
     }
@@ -162,46 +162,27 @@ void run_experiments(Storage &storage, std::vector<Entry> &entries, BPTree &inde
 		- the height of the updated B+ tree
 		- the content of the root node and its 1st child node of the updated B+ tree
      */
-    // TODO: delete
-//    cout << "search: "<<indexTree.search(1000, 1000).accessedNodes.size()<< endl;
-//    cout << "blocks: "<<indexTree.search(1000, 1000).accessedBlocks.size()<< endl;
     int pre = indexTree.getNumNodes();
-    cout << "previous num nodes "<< pre << endl;
+    cout << "previous num nodes " << pre << endl;
     indexTree.remove(1000);
     int after = indexTree.getNumNodes();
-    cout << "the number of times that a node is deleted (or two nodes are merged) during the process of the updating the B+ tree: "<<pre-after << endl;
-    cout << "after remove, num nodes "<< after << endl;
+    cout
+            << "the number of times that a node is deleted (or two nodes are merged) during the process of the updating the B+ tree: "
+            << pre - after << endl;
+    cout << "after remove, num nodes " << after << endl;
     cout << "levels: " << indexTree.getLevels() << endl;
-    cout <<  "root keys: " ;
-    for (int i=0; i<indexTree.getRoot()->getKeys().size(); i++){
+    cout << "root keys: ";
+    for (size_t i = 0; i < indexTree.getRoot()->getKeys().size(); i++) {
         cout << indexTree.getRoot()->getKeys()[i] << " ";
     }
     cout << endl;
     Node *firstChild = indexTree.getRoot()->getChildNodes()[0];
-    cout <<  "first child keys: ";
-    for (int i=0; i<firstChild->getKeys().size(); i++){
+    cout << "first child keys: ";
+    for (size_t i = 0; i < firstChild->getKeys().size(); i++) {
         cout << firstChild->getKeys()[i] << " ";
     }
     cout << endl;
 
-
-//    cout << "after num nodes "<< indexTree.getNumNodes() << endl;
-//
-//    cout << "search: "<<indexTree.search(1000, 1000).accessedNodes.size()<< endl;
-//    cout << "blocks: "<<indexTree.search(1000, 1000).accessedBlocks.size()<< endl;
-//    cout << "previous num nodes "<< indexTree.getNumNodes() << endl;
-//    indexTree.remove(499);
-//    cout << "after num nodes "<< indexTree.getNumNodes() << endl;
-
-
-
-
-//    std::cout << "number of times that a node is deleted = " << indexTree.getMaxKeys() << std::endl;
-//    std::cout << "the number of nodes of the B+ tree = " << indexTree.getNumNodes() << std::endl;
-//    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree = " << indexTree.getLevels() << std::endl;
-//    rootNode = indexTree.getRoot();
-//    std::cout << "the content of the root node: " << std::endl;
-//    printVector<uint32_t>(rootNode->getKeys());
 }
 
 int main(int argc, char *argv[]) {
@@ -229,54 +210,6 @@ int main(int argc, char *argv[]) {
               << std::endl;
     std::cout << "the first entry has numVotes: " << entries[0].numVotes
               << std::endl;
-
-
-//    BPTree t = BPTree(5);
-//
-//    vector<uint32_t> keys = t.getRoot()->getKeys();
-//    for (int i=0; i<keys.size(); i++){
-//        cout << keys[i] << " ";
-//    }
-//    cout << endl;
-//    vector<Node*> nodes = t.getRoot()->getChildNodes();
-//    for(int i=0; i< nodes.size(); i++){
-//        keys = nodes[i]->getKeys();
-//        for (int i=0; i<keys.size(); i++){
-//            cout << keys[i] << " ";
-//        }
-//    }
-//    cout << endl;
-//
-//    t.remove(1);
-//    keys = t.getRoot()->getKeys();
-//    for (int i=0; i<keys.size(); i++){
-//        cout << keys[i] << " ";
-//    }
-//    cout << endl;
-//    nodes = t.getRoot()->getChildNodes();
-//    for(int i=0; i< nodes.size(); i++){
-//        keys = nodes[i]->getKeys();
-//        for (int i=0; i<keys.size(); i++){
-//            cout << keys[i] << " ";
-//        }
-//        cout << endl;
-//    }
-//    t.remove(2);
-//    t.remove(6);
-//    keys = t.getRoot()->getKeys();
-//    for (int i=0; i<keys.size(); i++){
-//        cout << keys[i] << " ";
-//    }
-//    cout << endl;
-//    nodes = t.getRoot()->getChildNodes();
-//    for(int i=0; i< nodes.size(); i++){
-//        keys = nodes[i]->getKeys();
-//        for (int i=0; i<keys.size(); i++){
-//            cout << keys[i] << " ";
-//        }
-//    }
-//    cout << endl;
-
 
     return 0;
 }

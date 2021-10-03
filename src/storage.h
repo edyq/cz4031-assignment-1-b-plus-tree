@@ -10,11 +10,11 @@
 #include "block.h"
 
 struct Entry {
-	typedef uint8_t ratingType;
-	typedef uint32_t numVotesType;
-	static constexpr char tconstTerminator = '|';
-	static constexpr int tconstSize = 10;
-	static constexpr int size = 19;
+    typedef uint8_t ratingType;
+    typedef uint32_t numVotesType;
+    static constexpr char tconstTerminator = '|';
+    static constexpr int tconstSize = 10;
+    static constexpr int size = 19;
 
     // tconst	averageRating	numVotes
     char tconst[tconstSize];
@@ -22,11 +22,11 @@ struct Entry {
     numVotesType numVotes;  // uint16_t may leads to overflow
 
     std::string toString() {
-    	std::string s;
-    	s += tconst;
-    	s += " " + std::to_string(rating);
-    	s += " " + std::to_string(numVotes);
-    	return s;
+        std::string s;
+        s += tconst;
+        s += " " + std::to_string(rating);
+        s += " " + std::to_string(numVotes);
+        return s;
     }
 
     float getRating() {
@@ -57,7 +57,7 @@ struct Entry {
 };
 
 class Storage {
-   public:
+public:
     /**
      * @brief Construct a new Storage; init blocks
      *
@@ -65,6 +65,7 @@ class Storage {
      * @param block_size size in bytes
      */
     Storage(size_t total_size, size_t block_size);
+
     ~Storage();
 
     /**
@@ -76,9 +77,10 @@ class Storage {
      * @return std::shared_ptr<Block>
      */
     std::shared_ptr<Block> insertEntry(Entry entry);
-    std::vector<std::shared_ptr<Block>> initBatchInsertEntries(const std::vector<Entry>& entries);
 
-    bool deleteEntry(std::shared_ptr<Block>, const char* tconst);
+    std::vector<std::shared_ptr<Block>> initBatchInsertEntries(const std::vector<Entry> &entries);
+
+    bool deleteEntry(std::shared_ptr<Block>, const char *tconst);
 
     /**
      * Get entries whose numVotes is within [lowerBound, upperBound].
@@ -91,10 +93,10 @@ class Storage {
 
     static void print(std::shared_ptr<Block> block);
 
-   private:
+private:
     size_t total_size_;
     size_t block_size_;
-    char* arena_;
+    char *arena_;
     const size_t entry_size_ = Entry::size;
     std::vector<std::shared_ptr<Block>> blocks_;
 };

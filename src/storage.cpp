@@ -7,7 +7,7 @@
 
 #include "utils.h"
 
-Storage::Storage(size_t total_size, size_t block_size): total_size_(total_size), block_size_(block_size) {
+Storage::Storage(size_t total_size, size_t block_size) : total_size_(total_size), block_size_(block_size) {
     auto block_num = 1 + ((total_size - 1) / block_size);
     blocks_.reserve(block_num);
     arena_ = new char[total_size]();
@@ -33,9 +33,9 @@ std::shared_ptr<Block> Storage::insertEntry(Entry entry) {
 
     // step 2: find a proper block
     auto target_block = std::find_if(
-        begin(blocks_), end(blocks_), [this](std::shared_ptr<Block> blk) {
-            return blk->getRemainingSpace() >= entry_size_;
-        });
+            begin(blocks_), end(blocks_), [this](std::shared_ptr<Block> blk) {
+                return blk->getRemainingSpace() >= entry_size_;
+            });
     if (target_block == std::end(blocks_)) {
         std::cout << "no more available blocks! storage if full!" << std::endl;
         return nullptr;
@@ -48,7 +48,7 @@ std::shared_ptr<Block> Storage::insertEntry(Entry entry) {
     return *target_block;
 }
 
-std::vector<std::shared_ptr<Block>> Storage::initBatchInsertEntries(const std::vector<Entry>& entries) {
+std::vector<std::shared_ptr<Block>> Storage::initBatchInsertEntries(const std::vector<Entry> &entries) {
     std::vector<std::shared_ptr<Block>> target_blocks;
     size_t entry_per_block = std::floor((double) block_size_ / Entry::size);
     std::cout << "entry_per_block " << entry_per_block << std::endl;
@@ -70,9 +70,9 @@ std::vector<std::shared_ptr<Block>> Storage::initBatchInsertEntries(const std::v
     return target_blocks;
 };
 
-void advanceToNextEntry(char*& ptr) { ptr += Entry::size; }
+void advanceToNextEntry(char *&ptr) { ptr += Entry::size; }
 
-bool Storage::deleteEntry(std::shared_ptr<Block> block, const char* tconst) {
+bool Storage::deleteEntry(std::shared_ptr<Block> block, const char *tconst) {
     auto start = block->getPtr();
     for (auto ptr = start; ptr < block->getWritePtr();
          advanceToNextEntry(ptr)) {

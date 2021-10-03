@@ -9,6 +9,7 @@
 #include "block.h"
 #include <vector>
 #include <set>
+
 using namespace std;
 typedef int KEY_TYPE;
 
@@ -22,61 +23,65 @@ private:
 
     bool isLeaf;                // Whether this node is a leaf node;
     friend class BPTree;        // BPTree can access Node's private variables;
-    vector<Node *> pointers;      // attr for non-leaf node
+    vector<Node *> pointers;    // attr for non-leaf node
     vector<vector<shared_ptr<Block>>> blocks;              // attr for leaf node
-    Node *nextNode;         // attr for leaf node
-    Node *preNode;         // attr for leaf node
+    Node *nextNode;             // attr for leaf node
+    Node *preNode;              // attr for leaf node
 
 public:
     Node(int maxNumKeys, Node *parentPtr, bool isLeaf);
 
-    bool isLeafNode(){
+    bool isLeafNode() {
         return isLeaf;
     }
-    vector<Node *>getChildNodes() {
+
+    vector<Node *> getChildNodes() {
         return pointers;
     }
+
     vector<vector<shared_ptr<Block>>> getBlocks() {
         return blocks;
     }
 
-    vector<uint32_t> getKeys(){
+    vector<uint32_t> getKeys() {
         return keys;
     }
 
     Node *getNextNode() {
 
-        if (isLeaf){
+        if (isLeaf) {
             return nextNode;
-        }else{
+        } else {
             Node *parent = parentPtr;
-            for (int i=0; i<parent->pointers.size();i++){
-                if (parent->pointers[i] == this){
-                    if (i == parent->pointers.size()-1){
+            for (size_t i = 0; i < parent->pointers.size(); i++) {
+                if (parent->pointers[i] == this) {
+                    if (i == parent->pointers.size() - 1) {
                         return nullptr;
-                    }else{
-                        return parent->pointers[i+1];
+                    } else {
+                        return parent->pointers[i + 1];
                     }
                 }
             }
         }
-
+        return nullptr;
     }
+
     Node *getPreNode() {
-        if (isLeaf){
+        if (isLeaf) {
             return preNode;
-        }else{
+        } else {
             Node *parent = parentPtr;
-            for (int i=0; i<parent->pointers.size();i++){
-                if (parent->pointers[i] == this){
-                    if (i == 0){
+            for (size_t i = 0; i < parent->pointers.size(); i++) {
+                if (parent->pointers[i] == this) {
+                    if (i == 0) {
                         return nullptr;
-                    }else{
-                        return parent->pointers[i-1];
+                    } else {
+                        return parent->pointers[i - 1];
                     }
                 }
             }
         }
+        return nullptr;
     }
 
     Node *getParentPtr() {
@@ -84,7 +89,7 @@ public:
     }
 
 
-    ~Node(){};
+    ~Node() {};
 };
 
 struct SearchResult {
@@ -106,7 +111,7 @@ private:
 public:
     BPTree(int maxNumKeys);        // Constructor
 
-    ~BPTree(){};
+    ~BPTree() {};
 
     SearchResult search(uint32_t lbKey, uint32_t ubKey);
 
