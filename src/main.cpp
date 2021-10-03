@@ -10,7 +10,7 @@
 #include "bptree.h"
 
 std::vector<Entry> LoadEntryFromFileOrDie(
-    const std::string filename = "../data/data.tsv") {
+        const std::string filename = "../data/data.tsv") {
     std::ifstream fin(filename);
     assert(fin.good() && "failed to open file for data ");
     std::string infile;
@@ -21,7 +21,7 @@ std::vector<Entry> LoadEntryFromFileOrDie(
         if (++counter <= 3) continue;  // header, not needed
         switch (counter % 3) {
             case 1:  // tconst
-                for (size_t i = 0; i < 10; i ++) {
+                for (size_t i = 0; i < 10; i++) {
                     if (i < infile.size()) {
                         *(current_entry.tconst + i) = infile[i];
                     } else {
@@ -45,79 +45,84 @@ std::vector<Entry> LoadEntryFromFileOrDie(
  * Output experiment result.
  * @param accessedNodes accessed index nodes during search
  */
-void printIndexNodes(vector<Node *>& accessedNodes) {
-	int numOfIndexNodes = accessedNodes.size();
-	std::cout << "Number of index nodes accessed: " << numOfIndexNodes << std::endl;
-	std::cout << "Contents of index nodes accessed (at most 5 are printed): " << std::endl;
-	auto beg = accessedNodes.begin();
-	for (int i = 0; i < 5 && beg != accessedNodes.end(); i++, beg++) {
-		std::cout << "Node " << i + 1 << ":" << endl;
-		printVector<uint32_t>((*beg)->getKeys());
-	}
+void printIndexNodes(vector<Node *> &accessedNodes) {
+    int numOfIndexNodes = accessedNodes.size();
+    std::cout << "Number of index nodes accessed: " << numOfIndexNodes << std::endl;
+    std::cout << "Contents of index nodes accessed (at most 5 are printed): " << std::endl;
+    auto beg = accessedNodes.begin();
+    for (int i = 0; beg != accessedNodes.end(); i++, beg++) {
+        std::cout << "Node " << i + 1 << ":" << endl;
+        printVector<uint32_t>((*beg)->getKeys());
+    }
 }
 
 /**
  * Output experiment result.
  * @param accessedBlocks accessed blocks during search
  */
-void printBlocks(set<shared_ptr<Block>>& accessedBlocks) {
-	int numOfBlocks = accessedBlocks.size();
-	std::cout << "Number of blocks accessed: " << numOfBlocks << std::endl;
-	std::cout << "Contents of blocks accessed (at most 5 are printed): " << std::endl;
-	auto beg = accessedBlocks.begin();
-	for (int i = 0; i < 5 && beg != accessedBlocks.end(); i++, beg++) {
-		Storage::print(*beg);
-	}
+void printBlocks(set<shared_ptr<Block>> &accessedBlocks) {
+    int numOfBlocks = accessedBlocks.size();
+    std::cout << "Number of blocks accessed: " << numOfBlocks << std::endl;
+    std::cout << "Contents of blocks accessed (at most 5 are printed): " << std::endl;
+    auto beg = accessedBlocks.begin();
+    for (int i = 0; i < 5 && beg != accessedBlocks.end(); i++, beg++) {
+        Storage::print(*beg);
+    }
 }
 
-void printAvg(Storage& storage, set<shared_ptr<Block>>& accessedBlocks, uint32_t lb, uint32_t ub) {
-	// Search and calculate average
-	double sum = 0;
-	int count = 0;
-	for (auto beg = accessedBlocks.begin(); beg != accessedBlocks.end(); beg++) {
-		auto entries = storage.query(*beg, lb, ub);
-		for (auto entry : entries) {
-			sum += entry.getRating();
-			count++;
-		}
-	}
-	double avg = sum / count;
-	std::cout << "average of averageRating = " << avg << std::endl;
+void printAvg(Storage &storage, set<shared_ptr<Block>> &accessedBlocks, uint32_t lb, uint32_t ub) {
+    // Search and calculate average
+    double sum = 0;
+    int count = 0;
+
+    vector<Entry> allEntries;
+
+    for (auto beg = accessedBlocks.begin(); beg != accessedBlocks.end(); beg++) {
+        auto entries = storage.query(*beg, lb, ub);
+        for (auto entry: entries) {
+            sum += entry.getRating();
+            allEntries.push_back(entry);
+            count++;
+        }
+    }
+    double avg = sum / count;
+    std::cout << "average of averageRating = " << avg << std::endl;
 }
 
-void run_exp_3(Storage& storage, BPTree& indexTree) {
-	std::cout << "=========================" << std::endl;
-	std::cout << "Experiment 3:" << std::endl;
-	/**
- 	  * Experiment 3: retrieve those movies with the “numVotes” equal to 500 and report the following statistics:
-		- the number and the content of index nodes the process accesses
-		- the number and the content of data blocks the process accesses
-		- the average of “averageRating’s” of the records that are returned
- 	*/
- 	int lb = 500, ub = 500;
-	auto result = indexTree.search(lb, ub);
-	printIndexNodes(result.accessedNodes);
-	printBlocks(result.accessedBlocks);
-	printAvg(storage, result.accessedBlocks, lb, ub);
-}
-
-void run_exp_4(Storage& storage, BPTree& indexTree) {
-	std::cout << "=========================" << std::endl;
-	std::cout << "Experiment 4:" << std::endl;
-	/**
-     *  Experiment 4: retrieve those movies with the attribute “numVotes” from 30,000 to 40,000, both inclusively and report the following statistics:
-		- the number and the content of index nodes the process accesses
-		- the number and the content of data blocks the process accesses
-		- the average of “averageRating’s” of the records that are returned
+void run_exp_3(Storage &storage, BPTree &indexTree) {
+    std::cout << "=========================" << std::endl;
+    std::cout << "Experiment 3:" << std::endl;
+    /**
+       * Experiment 3: retrieve those movies with the “numVotes” equal to 500 and report the following statistics:
+        - the number and the content of index nodes the process accesses
+        - the number and the content of data blocks the process accesses
+        - the average of “averageRating’s” of the records that are returned
      */
-	int lb = 30000, ub = 40000;
-	auto result = indexTree.search(lb, ub);
-	printIndexNodes(result.accessedNodes);
-	printBlocks(result.accessedBlocks);
-	printAvg(storage, result.accessedBlocks, lb, ub);
+    int lb = 500, ub = 500;
+    auto result = indexTree.search(lb, ub);
+    printIndexNodes(result.accessedNodes);
+    printBlocks(result.accessedBlocks);
+    printAvg(storage, result.accessedBlocks, lb, ub);
 }
 
-void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& indexTree) {
+void run_exp_4(Storage &storage, BPTree &indexTree) {
+    std::cout << "=========================" << std::endl;
+    std::cout << "Experiment 4:" << std::endl;
+    /**
+     *  Experiment 4: retrieve those movies with the attribute “numVotes” from 30,000 to 40,000, both inclusively and report the following statistics:
+        - the number and the content of index nodes the process accesses
+        - the number and the content of data blocks the process accesses
+        - the average of “averageRating’s” of the records that are returned
+     */
+    int lb = 30000, ub = 40000;
+    auto result = indexTree.search(lb, ub);
+
+    printIndexNodes(result.accessedNodes);
+    printBlocks(result.accessedBlocks);
+    printAvg(storage, result.accessedBlocks, lb, ub);
+}
+
+void run_experiments(Storage &storage, std::vector<Entry> &entries, BPTree &indexTree) {
     auto target_blocks = storage.initBatchInsertEntries(entries);
     assert (target_blocks.size() == entries.size() && "target_blocks size must be the same with entries");
     std::set<std::shared_ptr<Block>> used_blocks(target_blocks.begin(), target_blocks.end());
@@ -133,17 +138,18 @@ void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& inde
     std::cout << "Experiment 2:" << std::endl;
     std::cout << "parameter n of the B+ tree: " << indexTree.getMaxKeys() << std::endl;
     std::cout << "the number of nodes of the B+ tree: " << indexTree.getNumNodes() << std::endl;
-    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree: " << indexTree.getLevels() << std::endl;
+    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree: " << indexTree.getLevels()
+              << std::endl;
     auto rootNode = indexTree.getRoot();
     std::cout << "the content of the root node: ";
     printVector<uint32_t>(rootNode->getKeys());
 
     // Experiment 3
-	run_exp_3(storage, indexTree);
+    run_exp_3(storage, indexTree);
 
 
     // Experiment 4
-	run_exp_4(storage, indexTree);
+    run_exp_4(storage, indexTree);
 
 
     // Experiment 5
@@ -159,13 +165,14 @@ void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& inde
     // TODO: delete
     std::cout << "number of times that a node is deleted = " << indexTree.getMaxKeys() << std::endl;
     std::cout << "the number of nodes of the B+ tree = " << indexTree.getNumNodes() << std::endl;
-    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree = " << indexTree.getLevels() << std::endl;
+    std::cout << "the height of the B+ tree, i.e., the number of levels of the B+ tree = " << indexTree.getLevels()
+              << std::endl;
     rootNode = indexTree.getRoot();
     std::cout << "the content of the root node: " << std::endl;
     printVector<uint32_t>(rootNode->getKeys());
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     assert(argc == 3 &&
            "invalid usage: ./main [storage_size_in_mb] [block_size_in_b]");
 
@@ -173,7 +180,7 @@ int main(int argc, char* argv[]) {
     std::cout << "setting storage size to " << argv[1] << " Mb" << std::endl;
     std::cout << "setting block size to " << argv[2] << " b" << std::endl;
     auto storage = Storage(/*total size*/ mbToBytes(std::atoi(argv[1])),
-                           std::atoi(argv[2]));
+                                          std::atoi(argv[2]));
     auto bpIndexTree = BPTree(3);
 
     // read data from file
