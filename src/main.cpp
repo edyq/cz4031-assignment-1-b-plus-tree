@@ -163,7 +163,7 @@ void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& inde
     cout << "previous num nodes "<< pre << endl;
     indexTree.remove(1000);
     int after = indexTree.getNumNodes();
-    cout << "the number of times that a node is deleted (or two nodes are merged) during the process of the updating the B+ tree: "<<after-pre << endl;
+    cout << "the number of times that a node is deleted (or two nodes are merged) during the process of the updating the B+ tree: "<<pre-after << endl;
     cout << "after remove, num nodes "<< after << endl;
     cout << "levels: " << indexTree.getLevels() << endl;
     cout <<  "root keys: " ;
