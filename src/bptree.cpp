@@ -76,7 +76,7 @@ void BPTree::removeInternal(uint32_t key) {
         }
         if (!get_node) {
             cur_node =
-                cur_node->getChildNodes()[cur_node->getChildNodes().size()];
+                cur_node->getChildNodes()[cur_node->getChildNodes().size()-1];
         }
     }
     bool found = false;
