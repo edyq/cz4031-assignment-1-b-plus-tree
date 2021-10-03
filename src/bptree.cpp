@@ -87,7 +87,7 @@ void BPTree::removeInternal(uint32_t key) {
     int index;
     keys = cur_node->getKeys();
     for (int i = 0; i < keys.size(); i++) {
-        cout << keys[i] << endl;
+//        cout << keys[i] << endl;
         if (key == keys[i]) {
             //            vector<shared_ptr<Block>> block =
             //            cur_node->getBlocks()[i];
@@ -236,7 +236,6 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
 
             if (lbKey < cursor->keys[i]) {
                 cursor = cursor->pointers[i];
-                cout << "lbkey: "<< lbKey << "cur key: " << cursor->keys[i] << endl;
                 result.accessedNodes.push_back(cursor);
 
                 // printVector(cursor->keys);
