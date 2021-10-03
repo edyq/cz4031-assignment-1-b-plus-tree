@@ -204,7 +204,6 @@ int main(int argc, char *argv[]) {
 
 
     //  run experiments
-    //  TODO: this section was not tested as bp hasn't been finished yet
     run_experiments(storage, entries, bpIndexTree);
 
     return 0;

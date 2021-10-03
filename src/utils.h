@@ -30,7 +30,7 @@ inline T charsToUnsignedNum(const char *buf) {
     T ret = 0;
     for (size_t i = 0; i < sizeof(T); i++) {
         ret |= (T) (unsigned char) buf[i]
-                << (8 * i);  // TODO: confirm the convertion is correct
+                << (8 * i);
     }
     return ret;
 }
