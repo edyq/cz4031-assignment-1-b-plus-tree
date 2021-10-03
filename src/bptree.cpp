@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 #include "utils.h"
+#include "storage.h"
 #include "block.h"
 #include "cassert"
 #include "iostream"
@@ -220,15 +221,14 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
                 cursor = cursor->pointers[i];
                 result.accessedNodes.push_back(cursor);
 
-                printVector(cursor->keys);
+                // printVector(cursor->keys);
 
                 break;
             }
             if (i == cursor->numKeys - 1) {
                 cursor = cursor->pointers.back();
 
-                printVector(cursor->keys);
-
+                // printVector(cursor->keys);
                 result.accessedNodes.push_back(cursor);
                 break;
             }
@@ -237,20 +237,22 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
 
     // search the level of leaf nodes
     while (true) {
-        printVector(cursor->keys);
-
         for (int i = 0; i < cursor->numKeys; i++) {
             if (cursor->keys[i] >= lbKey && cursor->keys[i] <= ubKey) {
-                for (uint32_t j = 0; j < cursor->blocks.size(); j++) {
+                for (uint32_t j = 0; j < cursor->blocks[i].size(); j++) {
+                    cout << cursor->blocks[i][j] << endl;
                     result.accessedBlocks.insert(cursor->blocks[i][j]);
                 }
             }
         }
 
-        cursor = cursor->nextNode;
+        if (cursor->nextNode != nullptr)
+            cursor = cursor->nextNode;
+        else break;
         if (cursor == nullptr) break;
         if (cursor->keys[0] > ubKey) break;
     }
+
     return result;
 }
 
@@ -281,7 +283,6 @@ void BPTree::insert(uint32_t key, shared_ptr<Block> blockAddress) {
                 }
                 // reaching last key in the node
                 if (i == cursor->numKeys - 1) {
-                    // todo: change -1; pointers
                     Node *endNode = cursor->pointers.back();
                     cursor = endNode;
                     break;
