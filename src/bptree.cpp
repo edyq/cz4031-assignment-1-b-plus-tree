@@ -6,7 +6,7 @@
 #include <cmath>
 #include <memory>
 #include <vector>
-
+#include "utils.h"
 #include "block.h"
 #include "cassert"
 #include "iostream"
@@ -211,19 +211,25 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
     // single key search
     SearchResult result;
     Node *cursor = root;
-    result.accessedNodes.insert(root);
+    result.accessedNodes.push_back(root);
 
     // go to leaf node
     while (!cursor->isLeaf) {
         for (int i = 0; i < cursor->numKeys; i++) {
             if (lbKey < cursor->keys[i]) {
                 cursor = cursor->pointers[i];
-                result.accessedNodes.insert(cursor);
+                result.accessedNodes.push_back(cursor);
+
+                printVector(cursor->keys);
+
                 break;
             }
             if (i == cursor->numKeys - 1) {
                 cursor = cursor->pointers.back();
-                result.accessedNodes.insert(cursor);
+
+                printVector(cursor->keys);
+
+                result.accessedNodes.push_back(cursor);
                 break;
             }
         }
@@ -231,14 +237,16 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
 
     // search the level of leaf nodes
     while (true) {
+        printVector(cursor->keys);
+
         for (int i = 0; i < cursor->numKeys; i++) {
             if (cursor->keys[i] >= lbKey && cursor->keys[i] <= ubKey) {
-                result.accessedNodes.insert(cursor);
                 for (uint32_t j = 0; j < cursor->blocks.size(); j++) {
                     result.accessedBlocks.insert(cursor->blocks[i][j]);
                 }
             }
         }
+
         cursor = cursor->nextNode;
         if (cursor == nullptr) break;
         if (cursor->keys[0] > ubKey) break;

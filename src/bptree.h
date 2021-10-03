@@ -87,7 +87,7 @@ public:
 };
 
 struct SearchResult {
-    set<Node *> accessedNodes;
+    vector<Node *> accessedNodes;
     set<shared_ptr<Block>> accessedBlocks;
 };
 

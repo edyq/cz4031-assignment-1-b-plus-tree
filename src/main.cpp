@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <set>
+#include <queue>
 
 #include "storage.h"
 #include "utils.h"
@@ -44,7 +45,7 @@ std::vector<Entry> LoadEntryFromFileOrDie(
  * Output experiment result.
  * @param accessedNodes accessed index nodes during search
  */
-void printIndexNodes(set<Node *>& accessedNodes) {
+void printIndexNodes(vector<Node *>& accessedNodes) {
 	int numOfIndexNodes = accessedNodes.size();
 	std::cout << "Number of index nodes accessed: " << numOfIndexNodes << std::endl;
 	std::cout << "Contents of index nodes accessed (at most 5 are printed): " << std::endl;
@@ -93,7 +94,7 @@ void run_exp_3(Storage& storage, BPTree& indexTree) {
 		- the number and the content of data blocks the process accesses
 		- the average of “averageRating’s” of the records that are returned
  	*/
- 	int lb = 500, ub = 500;
+ 	int lb = 1645, ub = 1645;
 	auto result = indexTree.search(lb, ub);
 	printIndexNodes(result.accessedNodes);
 	printBlocks(result.accessedBlocks);
@@ -109,7 +110,7 @@ void run_exp_4(Storage& storage, BPTree& indexTree) {
 		- the number and the content of data blocks the process accesses
 		- the average of “averageRating’s” of the records that are returned
      */
-	int lb = 30000, ub = 40000;
+	int lb = 112, ub = 120;
 	auto result = indexTree.search(lb, ub);
 	printIndexNodes(result.accessedNodes);
 	printBlocks(result.accessedBlocks);
@@ -177,7 +178,7 @@ int main(int argc, char* argv[]) {
     std::cout << "setting block size to " << argv[2] << " b" << std::endl;
     auto storage = Storage(/*total size*/ mbToBytes(std::atoi(argv[1])),
                            std::atoi(argv[2]));
-    auto bpIndexTree = BPTree(3);
+    auto bpIndexTree = BPTree(7);
 
     // read data from file
     std::cout << "loading data" << std::endl;
