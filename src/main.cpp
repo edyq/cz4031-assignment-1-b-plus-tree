@@ -143,6 +143,8 @@ void run_experiments(Storage &storage, std::vector<Entry> &entries, BPTree &inde
     auto rootNode = indexTree.getRoot();
     std::cout << "the content of the root node: ";
     printVector<uint32_t>(rootNode->getKeys());
+    std::cout << "the content of the root's 1st child node: ";
+    printVector<uint32_t>(rootNode->getChildNodes()[0]->getKeys());
 
     // Experiment 3
     run_exp_3(storage, indexTree);
@@ -204,12 +206,6 @@ int main(int argc, char *argv[]) {
     //  run experiments
     //  TODO: this section was not tested as bp hasn't been finished yet
     run_experiments(storage, entries, bpIndexTree);
-
-
-    std::cout << "the first entry has rating: " << entries[0].getRating()
-              << std::endl;
-    std::cout << "the first entry has numVotes: " << entries[0].numVotes
-              << std::endl;
 
     return 0;
 }
