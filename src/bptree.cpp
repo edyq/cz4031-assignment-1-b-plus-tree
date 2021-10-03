@@ -67,17 +67,21 @@ void BPTree::removeInternal(uint32_t key) {
     while (!cur_node->isLeafNode()) {
         bool get_node = false;
         for (int i = 0; i < keys.size(); i++) {
-            cout << cur_node->getChildNodes().size() << endl;
+//            cout << "child size: "<< cur_node->getChildNodes().size() << endl;
+//            cout << key << " " << keys[i] << endl;
             if (key < keys[i]) {
                 cur_node = cur_node->getChildNodes()[i];
-                cout << "get it, " << i << endl;
+//                cout << "get it, " << i << endl;
                 get_node = true;
+                break;
             }
         }
         if (!get_node) {
+//            cout << "pick last one" << endl;
             cur_node =
                 cur_node->getChildNodes()[cur_node->getChildNodes().size()-1];
         }
+        keys = cur_node->getKeys();
     }
     bool found = false;
     int index;
@@ -103,6 +107,7 @@ void BPTree::removeInternal(uint32_t key) {
         cur_node->blocks.erase(cur_node->blocks.begin() + index);
         cur_node->numKeys--;
         cout << "removed" << endl;
+//        cout << "cur_node->numKeys: " << cur_node->numKeys << endl;
         //        for parent node deletion, we consider the case
         while (cur_node != root &&
                cur_node->numKeys < ceil(float(cur_node->maxKeys) / 2)) {
@@ -217,8 +222,10 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
     // go to leaf node
     while (!cursor->isLeaf) {
         for (int i = 0; i < cursor->numKeys; i++) {
+
             if (lbKey < cursor->keys[i]) {
                 cursor = cursor->pointers[i];
+                cout << "lbkey: "<< lbKey << "cur key: " << cursor->keys[i] << endl;
                 result.accessedNodes.push_back(cursor);
 
                 // printVector(cursor->keys);
