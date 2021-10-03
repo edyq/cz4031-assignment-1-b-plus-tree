@@ -51,7 +51,7 @@ struct Entry {
             }
         }
         std::string convertedTconst(tmpChar);
-        delete tmpChar;
+        delete[] tmpChar;
         return convertedTconst;
     }
 };
@@ -76,6 +76,7 @@ class Storage {
      * @return std::shared_ptr<Block>
      */
     std::shared_ptr<Block> insertEntry(Entry entry);
+    std::vector<std::shared_ptr<Block>> initBatchInsertEntries(const std::vector<Entry>& entries);
 
     bool deleteEntry(std::shared_ptr<Block>, const char* tconst);
 
