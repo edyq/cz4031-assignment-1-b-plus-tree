@@ -240,15 +240,10 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
             if (lbKey < cursor->keys[i]) {
                 cursor = cursor->pointers[i];
                 result.accessedNodes.push_back(cursor);
-
-                // printVector(cursor->keys);
-
                 break;
             }
             if (i == cursor->numKeys - 1) {
                 cursor = cursor->pointers.back();
-
-                // printVector(cursor->keys);
                 result.accessedNodes.push_back(cursor);
                 break;
             }
@@ -264,7 +259,7 @@ SearchResult BPTree::search(uint32_t lbKey, uint32_t ubKey) {
                 }
             }
         }
-
+        result.accessedNodes.push_back(cursor);
         if (cursor->nextNode != nullptr)
             cursor = cursor->nextNode;
         else break;
