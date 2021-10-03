@@ -109,9 +109,11 @@ void BPTree::removeInternal(uint32_t key) {
         cout << "removed" << endl;
 //        cout << "cur_node->numKeys: " << cur_node->numKeys << endl;
         //        for parent node deletion, we consider the case
-//        cout << "cur_node->numKeys is: " << cur_node->numKeys << endl;
-        while (cur_node != root &&
-               cur_node->numKeys < ceil(float(cur_node->maxKeys) / 2)) {
+        cout << "cur_node->numKeys is: " << cur_node->numKeys << endl;
+        while (cur_node != root && \
+            ((cur_node->isLeafNode() && cur_node->numKeys<floor((float(cur_node->maxKeys)+1) / 2))|| \
+            (!cur_node->isLeafNode() && cur_node->numKeys<floor(float(cur_node->maxKeys) / 2)))
+            ) {
             cout << "try borrow from pre" << endl;
             Node *preNode = cur_node->getPreNode();
             if (preNode &&
