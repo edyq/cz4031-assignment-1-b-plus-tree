@@ -1,12 +1,13 @@
 #include "storage.h"
 
+#include <cmath>
 #include <algorithm>
 #include <cstring>
 #include <iostream>
 
 #include "utils.h"
 
-Storage::Storage(size_t total_size, size_t block_size) {
+Storage::Storage(size_t total_size, size_t block_size): total_size_(total_size), block_size_(block_size) {
     auto block_num = 1 + ((total_size - 1) / block_size);
     blocks_.reserve(block_num);
     arena_ = new char[total_size]();
@@ -46,6 +47,28 @@ std::shared_ptr<Block> Storage::insertEntry(Entry entry) {
 
     return *target_block;
 }
+
+std::vector<std::shared_ptr<Block>> Storage::initBatchInsertEntries(const std::vector<Entry>& entries) {
+    std::vector<std::shared_ptr<Block>> target_blocks;
+    size_t entry_per_block = std::floor((double) block_size_ / Entry::size);
+    std::cout << "entry_per_block " << entry_per_block << std::endl;
+    size_t block_idx = 0;
+    auto serlized_entry = new char[Entry::size];
+    for (size_t i = 0; i < entries.size(); i++) {
+        if (i != 0 && i % entry_per_block == 0) {
+            block_idx++;
+        }
+        auto ptr = serlized_entry;
+        std::memcpy(ptr, entries[i].tconst, 10);
+        ptr += 10;
+        unsignedNumToChars<uint8_t>(ptr, entries[i].rating);
+        unsignedNumToChars<uint32_t>(++ptr, entries[i].numVotes);
+        blocks_[block_idx]->writeData(serlized_entry, Entry::size);
+        target_blocks.push_back(blocks_[block_idx]);
+    }
+    delete[] serlized_entry;
+    return target_blocks;
+};
 
 void advanceToNextEntry(char*& ptr) { ptr += Entry::size; }
 

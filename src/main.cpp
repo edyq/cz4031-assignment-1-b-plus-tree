@@ -94,7 +94,7 @@ void run_exp_3(Storage& storage, BPTree& indexTree) {
 		- the number and the content of data blocks the process accesses
 		- the average of “averageRating’s” of the records that are returned
  	*/
- 	int lb = 241, ub = 241;
+ 	int lb = 500, ub = 500;
 	auto result = indexTree.search(lb, ub);
 	printIndexNodes(result.accessedNodes);
 	printBlocks(result.accessedBlocks);
@@ -110,7 +110,7 @@ void run_exp_4(Storage& storage, BPTree& indexTree) {
 		- the number and the content of data blocks the process accesses
 		- the average of “averageRating’s” of the records that are returned
      */
-	int lb = 15, ub = 20;
+	int lb = 30000, ub = 40000;
 	auto result = indexTree.search(lb, ub);
 	printIndexNodes(result.accessedNodes);
 	printBlocks(result.accessedBlocks);
@@ -118,49 +118,11 @@ void run_exp_4(Storage& storage, BPTree& indexTree) {
 }
 
 void run_experiments(Storage& storage, std::vector<Entry>& entries, BPTree& indexTree) {
-    std::vector<Entry> newVec(entries.begin(), entries.begin() + 50);  // FIXME: take only the first 100 for testing
-    entries = newVec;
-    std::set<std::shared_ptr<Block>> used_blocks;
-    size_t i = 1;
-    for (auto& entry: entries) {
-        auto block_ptr = storage.insertEntry(entry);
-//        std::cout << "inserting " << i++ << " out of " << entries.size() << std::endl;
-//        std::cout << "key to insert: " << entry.numVotes << endl;
-        indexTree.insert(entry.numVotes, block_ptr);
-//        if (i == 50) {
-//            std::cout << "root is: " << "";
-//            printVector(indexTree.getRoot()->getKeys());
-//            std::cout << "second level is" << "";
-//            for (auto child: indexTree.getRoot()->getChildNodes()) {
-//                cout << "" << endl;
-//                printVector(child->getKeys());
-//                for (auto kid : child->getChildNodes()) {
-//                    cout << "third level " << endl;
-//                    printVector(kid->getKeys());
-//                    for (auto haizi: kid->getChildNodes()) {
-//                        cout << "4th level " << endl;
-//                        printVector(haizi->getKeys());
-//                    }
-//                }
-//            }
-//
-//            std::cout << "checking prev /next ptr of leaf nodes " << std::endl;
-//            Node* cursor = indexTree.getRoot();
-//            while (! cursor->isLeafNode()) {
-//                cursor = cursor->getChildNodes()[0];
-//            }
-//            while (cursor->getNextNode() != nullptr) {
-//                printVector(cursor->getNextNode()->getKeys());
-//                cursor = cursor->getNextNode();
-//            }
-//            std::cout << "backup" << endl;
-//            while (cursor->getPreNode() != nullptr) {
-//                printVector(cursor->getPreNode()->getKeys());
-//                cursor = cursor->getPreNode();
-//            }
-//        }
-        i++;
-        used_blocks.insert(block_ptr);
+    auto target_blocks = storage.initBatchInsertEntries(entries);
+    assert (target_blocks.size() == entries.size() && "target_blocks size must be the same with entries");
+    std::set<std::shared_ptr<Block>> used_blocks(target_blocks.begin(), target_blocks.end());
+    for (size_t i = 0; i < target_blocks.size(); i++) {
+        indexTree.insert(entries[i].numVotes, target_blocks[i]);
     }
     std::cout << "=========================" << std::endl;
     std::cout << "Experiment 1:" << std::endl;
